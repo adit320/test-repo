@@ -1,0 +1,53 @@
+<!-- TODO: WIP. This will be used for the ajax search when we eventually do that -->
+
+{% layout none %}
+<div class="col-span-3 mt-5">
+  <div class="flex justify-between mb-5">
+    {%- if search.types contains 'product' -%}
+      <span class="">{{ 'search.general.results_count' | t: count: search.results_count }}</span>
+    {%- else -%}
+      {%- if search.types contains 'article' and search.types contains 'page' -%}
+        <span class="">{{ 'search.general.pages_and_articles' | t }}</span>
+      {%- elsif search.types contains 'article' -%}
+        <span class="">{{ 'search.general.articles' | t }}</span>
+      {%- else -%}
+        <span class="">{{ 'search.general.pages' | t }}</span>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if search.results_count > 0 -%}
+      <a class="" href="{{ routes.search_url }}?q={{ search.terms }}&type={{ search.types | join: ',' }}">{{ 'search.general.view_all' | t }}</a>
+    {%- endif -%}
+  </div>
+
+  <div class="">
+    {%- if search.results_count == 0 -%}
+      <p>{{ 'search.general.no_results' | t }}</p>
+    {%- else -%}
+      {%- if search.types contains 'product' -%}
+        {%- if settings.search_mode == 'product' -%}
+          {%- assign results_count = 4 -%}
+        {%- else -%}
+          {%- assign results_count = 3 -%}
+        {%- endif -%}
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {%- for result in search.results limit: results_count -%}
+            {%- comment -%}The inline onclick is a bit hacky, but it's easier on mobile to have the full line clickable{%- endcomment -%}
+            <div class="{{ results_count }}" onclick="window.location.href = '{{ result.url }}'">
+              {%- render 'product-item', product: result, show_product_info: true -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <ul class="">
+          {%- for result in search.results limit: 6 -%}
+            <li class="">
+              <a href="{{ result.url }}" class="">{{ result.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

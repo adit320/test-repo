@@ -1,0 +1,63 @@
+{%- if section.settings.enable_bar -%}
+    <section class="text-center py-2 text-sm announcement">
+        {%- if section.settings.link -%}
+          <a class="announcement-link" href="{{ section.settings.link }}">{{ section.settings.rich-content}}</a>
+        {%- else -%}
+          {{ section.settings.rich-content}}
+        {%- endif -%}
+    </section>
+{%- endif -%}
+<style>
+ .announcement {
+   color: {{section.settings.text_color }};
+   background-color: {{section.settings.background }};
+ }
+ .announcement-link {
+  color: {{section.settings.text_color }};
+ }
+ .announcement-link:hover {
+  color: {{section.settings.link_hover_color }};
+ }
+</style>
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "announcement",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_bar",
+      "label": "Enable bar",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#2E2E2E"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#E5E7EB"
+    },
+    {
+      "type": "richtext",
+      "id": "rich-content",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ]
+}
+{% endschema %}

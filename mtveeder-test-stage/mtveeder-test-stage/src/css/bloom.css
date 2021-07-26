@@ -1,0 +1,12 @@
+/* Use this file to target bloom loaded elements with theme settings */
+.bloom__body {
+  margin-top: 20px;
+}
+
+.bloom__body .bloom__simple-container {
+  border: 1px solid var(--color-border);
+}
+
+.bloom__body .bloom-table thead tr, .bloom__body .bloom-table tbody tr {
+  border-bottom: 1px solid var(--color-horizontal-rule);
+}

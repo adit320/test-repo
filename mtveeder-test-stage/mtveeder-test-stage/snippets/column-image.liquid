@@ -1,0 +1,24 @@
+<div class="{% if alignment == "center" %} mx-auto {% endif %} {% if button_link %}cursor-pointer{% endif %} {{class}}" style="max-width: {{max_image_width}}px"
+{% if button_link %} {% unless button_link contains 'http://' or button_link contains 'https://' %} onclick='location.href = "{{button_link}}"' {% else %} onclick='window.open("{{button_link}}", "_blank")' {% endunless %}{% endif %} >
+  {% capture img_id %}TextColumnImage-{{ id }}{% endcapture %}
+  {% if image != blank %}
+    {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+    <img
+        class="lazyload w-full {% if alignment == "center" %} mx-auto {% endif %} {% if unpadded %} mx-0 {% endif %}"
+        data-src="{{ img_url }}"
+        data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+        data-aspectratio="{{ image.aspect_ratio }}"
+        data-sizes="auto"
+        alt="{{ image.alt | escape }}"
+        style="max-width: 35%">
+    <noscript>
+      <p>
+        {{ image | img_url: '480x480', scale: 2 | img_tag: image.alt, 'feature-row__image' }}
+      </p>
+    </noscript>
+  {% else %}
+    <p>
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+    </p>
+  {% endif %}
+  </div>

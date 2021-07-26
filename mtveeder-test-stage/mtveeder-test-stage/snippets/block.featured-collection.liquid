@@ -1,0 +1,51 @@
+{%- assign image_padding = 'p-8 pb-0' -%}
+{% case block.settings.image_size %}
+  {% when "full" %}
+    {%- assign image_padding = '' -%}
+  {% when 'padded' %}
+  {%- assign image_padding = 'p-8 pb-0' -%}
+{% endcase %}
+<div class="section" style="background-color: {{block.settings.bg_color}};">
+  {% assign collection = blank %}
+    {% for c in collections %}
+        {% if c.handle == block.settings.collection %}
+            {% assign collection = c %}
+        {% endif %}
+    {% endfor %}
+
+  <div class="container-7xl ">
+      <div class="mb-7 md:mb-12 text-center">
+          <div class="mb-12 text-center mx-auto max-w-md {% if block.settings.full_width %} max-w-4xl {% endif %}">
+              <h2 class="text-2xl font-semibold">{% if block.settings.heading != blank %}{{block.settings.heading}}{% else %}{{ collection.title | escape }}{% endif %}</h2>
+              {% if block.settings.subheading != blank %}
+                <h3 class="text-lg font-semibold">{{block.settings.subheading}}</h3>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p>{{block.settings.description}}</p>
+              {% endif %}
+          </div>
+      </div>
+
+    <div class="flex flex-wrap justify-center -ml-4 lg:-ml-6 -mb4">
+    {%- assign grid_item_width = 'w-full md:w-1/2 lg:w-1/3' -%}
+    {%- assign column_width = grid_item_width -%}
+     {% for product in collection.products %}
+        {% render 'product-card',
+          max_image_width: block.settings.image_width,
+          column_width: column_width,
+          card_bg: block.settings.card_bg,
+          id: block.id,
+          product: product,
+          enable_image: true,
+        %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<style>
+  #shopify-section-collection-page .page {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+</style>
+

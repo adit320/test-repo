@@ -1,0 +1,108 @@
+{% if customer %}
+  {% for tag in customer.tags %}
+     {% if tag contains "CLUB-LEVEL-" %}
+        {% assign is_member = true %}
+     {% endif %}
+  {% endfor %} 
+{% endif %}
+{% if settings.development_mode %}
+  {% assign is_member = true %}
+{% endif %}
+
+<section class="py-12 md:py-16">
+  <div class="container-6xl">
+      <header>
+        <a href="{{ routes.account_logout_url }}" class="text-sm text-link mb-5 inline-block uppercase  ">{{ 'customer.account.logout' | t }}</a>
+    
+        <div class="mb-5 md:mb-8">
+          <h1 class="text-header text-3xl md:text-4xl mb-3">{{ 'customer.account.title' | t }}</h1>
+          <p class="text-sm text-light">{{ 'customer.account.welcome' | t: first_name: customer.first_name }}</p>
+        </div>
+      </header>
+    
+      <div class="lg:flex lg:nowrap">
+        {%- comment -%}
+        --------------------------------------------------------------------------------------------------------------------
+        ORDER HISTORY
+        --------------------------------------------------------------------------------------------------------------------
+        {%- endcomment -%}
+    
+        <div class="flex-grow">
+          {%- if customer.orders.size == 0 -%}
+            <div class="Segment">
+              <h2 class="Segment__Title Heading u-h7">{{ 'customer.account.no_orders_title' | t }}</h2>
+    
+              <div class="Segment__Content">
+                <p>{{ 'customer.account.no_orders_content' | t }}</p>
+              </div>
+            </div>
+          {%- else -%}
+            {%- paginate customer.orders by 25 -%}
+              <div class="overflow-auto">
+                <table class="table w-full">
+                  <thead class="">
+                    <tr>
+                      <th class="text-sm text-light">{{ 'customer.orders.order_number' | t }}</th>
+                      <th class="text-sm text-light">{{ 'customer.orders.date' | t }}</th>
+                      <th class="text-sm text-light">{{ 'customer.orders.payment_status' | t }}</th>
+                      <th class="text-sm text-light">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                      <th class="text-sm text-right">{{ 'customer.orders.total' | t }}</th>
+                    </tr>
+                  </thead>
+    
+                  <tbody class="text-sm">
+                    {%- for order in customer.orders -%}
+                      <tr>
+                        <td><a href="{{ order.customer_url }}" class="text-link ">{{ order.name }}</a></td>
+                        <td>{{ order.created_at | date: format: 'month_day_year' }}</td>
+                        <td>{{ order.financial_status_label }}</td>
+                        <td>{{ order.fulfillment_status_label }}</td>
+                        <td class="text-right">{{ order.total_price | money_without_trailing_zeros }}</td>
+                      </tr>
+                    {%- endfor -%}
+                  </tbody>
+                </table>
+              </div>
+    
+              {%- render 'pagination', paginate: paginate -%}
+            {%- endpaginate -%}
+          {%- endif -%}
+        </div>
+    
+        {%- comment -%}
+        --------------------------------------------------------------------------------------------------------------------
+        ADDRESS
+        --------------------------------------------------------------------------------------------------------------------
+        {%- endcomment -%}
+    
+        <div class="lg:ml-12 lg:max-w-2xs">
+          <div class="">
+            {%- if customer.addresses_count == 0 -%}
+              <h2 class="border-b text-sm uppercase pb-3 mb-3">{{ 'customer.account.no_addresses_title' | t }}</h2>
+    
+              <div class="">
+                <p>{{ 'customer.account.no_addresses_content' | t }}</p>
+    
+                <div class="mt-8">
+                  <a href="{{ routes.account_addresses_url }}" class="button-default">{{ 'customer.account.manage_addresses' | t }}</a>
+                </div>
+              </div>
+            {%- else -%}
+              <h3 class="border-b text-sm uppercase mb-3">{{ 'customer.account.default_address' | t }}</h3>
+    
+              <div class="">
+                {{ customer.default_address | format_address | replace: '<p>', '<p class="text-xs text-light tracking-wide mb-4"><span class="inline-block">' | replace_first: '<br>', '</span><br>' }}
+                <div class="mt-8">
+                  <a href="{{ routes.account_addresses_url }}" class="button-default">{{ 'customer.account.edit_addresses' | t }}</a>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+          {% if is_member == true %}
+            {% section 'account' %}
+          {% endif %}
+        </div>
+      </div>
+
+  </div>
+</section>

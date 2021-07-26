@@ -1,0 +1,16 @@
+<script>
+function getClubSignupProperties(levelName) {
+  var level = Bloom.storefront.data.clubs.flatMap(function(c) { return c.levels }).find(function(l) { return levelName.toLowerCase().includes(l.name.toLowerCase()) })
+  var club = Bloom.storefront.data.clubs.find(function(c) { return c.id == level.clubId });
+   var attributes = {
+     _discount_value: level.discounts[0].value,
+     _discount_type: "percentage"
+   }
+   attributes[club.name] = level.name;
+ return {
+     variantId: level.releases[0].options[0].variantId,
+     quantity: level.releases[0].options[0].quantities[0].value,
+     attributes: attributes
+   } 
+}
+</script>

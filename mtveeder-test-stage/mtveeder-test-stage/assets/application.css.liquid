@@ -1,0 +1,175 @@
+{{ settings.heading_font | font_face: font_display: 'fallback' }}
+{{ settings.text_font | font_face: font_display: 'fallback' }}
+
+{% assign text_font_100 = settings.text_font | font_modify: 'weight', "100" %}
+{% assign text_font_200 = settings.text_font | font_modify: 'weight', "200" %}
+{% assign text_font_300 = settings.text_font | font_modify: 'weight', "300" %}
+{% assign text_font_400 = settings.text_font | font_modify: 'weight', "400" %}
+{% assign text_font_500 = settings.text_font | font_modify: 'weight', "500" %}
+{% assign text_font_600 = settings.text_font | font_modify: 'weight', "600" %}
+{% assign text_font_700 = settings.text_font | font_modify: 'weight', "700" %}
+
+{{ text_font_100 | font_face: font_display: 'fallback' }}
+{{ text_font_200 | font_face: font_display: 'fallback' }}
+{{ text_font_300 | font_face: font_display: 'fallback' }}
+{{ text_font_400 | font_face: font_display: 'fallback' }}
+{{ text_font_500 | font_face: font_display: 'fallback' }}
+{{ text_font_600 | font_face: font_display: 'fallback' }}
+{{ text_font_700 | font_face: font_display: 'fallback' }}
+
+{{ settings.button_font | font_face: font_display: 'fallback' }}
+{{ settings.button_font_secondary | font_face: font_display: 'fallback' }}
+{{ settings.atc_button_font | font_face: font_display: 'fallback' }}
+{{ settings.button_sold_out_font | font_face: font_display: 'fallback' }}
+{{ settings.button_disabled_font | font_face: font_display: 'fallback' }}
+
+:root {
+  /* general */
+  --page-background: {{settings.page_background}};
+  --light-background: {{settings.light_background}};
+  --success-color: {{settings.success_color}};
+  --success-background-color: {{settings.success_background_color}};
+  --danger-color: {{settings.danger_color}};
+  --danger-background-color: {{settings.danger_background_color}};
+
+  /* fonts */
+  --body-font-color: {{settings.text_color}};
+  --text-light-color: {{settings.text_light_color}};
+  --link-color: {{settings.link_color}};
+  --link-hover-color: {{settings.link_hover_color}};
+  --heading-font-color: {{settings.heading_color}};
+  --font-heading: {{settings.heading_font.family}};
+  --font-primary: {{settings.text_font.family}};
+  --body-font-size: {{settings.desktop_text_font_size}}px;
+  --body-font-weight: {{settings.text_font.weight}};
+
+  --mobile-body-font-size: {{settings.base_text_font_size}}px;
+  --mobile-body-line-height: {{settings.mobile_body_line_height}}px;
+
+  /* used for calculating header size */
+  --body-font-multiplier: {{settings.desktop_text_font_size}};
+  --heading-font-size: {{settings.base_heading_font_size}};
+  --heading-line-height: {{settings.base_heading_line_height}};
+  --heading-letter-spacing: {{settings.base_heading_letter_spacing}}px;
+  --body-line-height: {{settings.base_text_line_height}}px;
+  
+  /* rules */
+  --color-horizontal-rule: {{settings.horizontal_rule}};
+  --color-vertical-rule: {{settings.vertical_rule}};
+  --color-border: {{settings.border_color}};
+
+  /* navbar */
+  --color-navbar--bg: {{settings.navbar_bg }};
+
+  /* navbar button */
+  --color-navbar-button: {{settings.navbar_button }};
+  --color-navbar-button--hover: {{settings.navbar_button_hover }};
+  --color-navbar-button--bg: {{settings.navbar_button_bg }};
+  --color-navbar-button--bghover: {{settings.navbar_button_bghover }};
+
+  /* block/icon button */
+  --color-navbar-block-button: {{settings.navbar_block_button }};
+  --color-navbar-block-button--hover: {{settings.navbar_block_button_hover }};
+  --color-navbar-block-button--bg: {{settings.navbar_block_button_bg }};
+  --color-navbar-block-button--bghover: {{settings.navbar_block_button_bghover }};
+
+  /* menu button */
+  --color-navbar-menu-button: {{settings.navbar_menu_button }};
+  --color-navbar-menu-button--hover: {{settings.navbar_menu_button_hover }};
+  --color-navbar-menu-button--bg: {{settings.navbar_menu_button_bg }};
+  --color-navbar-menu-button--bghover: {{settings.navbar_menu_button_bghover }};
+
+  /* drawer button */
+  --color-drawer-button: {{settings.drawer_button }};
+  --color-drawer-button--hover: {{settings.drawer_button_hover }};
+  --color-drawer-button--bg: {{settings.drawer_button_bg }};
+  --color-drawer-button--bghover: {{settings.drawer_button_bghover }};
+
+
+  /* footer elements */
+  --footer-bg: {{settings.footer_background}};
+  --footer-heading-text-color: {{settings.footer_heading_color}};
+  --footer-body-text-color: {{settings.footer_text_color}};
+  --color-footer-social-button: {{settings.footer_social_button }};
+  --color-footer-social-button--hover: {{settings.footer_social_button_hover }};
+  --color-footer-social-button--bg: {{settings.footer_social_button_bg }};
+  --color-footer-social-button--bghover: {{settings.footer_social_button_bghover }};
+  /* secondary elements */
+  --secondary-elements-bg: {{settings.secondary_elements_background}};
+  --tasting-bar-color: {{settings.tasting_bar}};
+  --tasting-bar-bg: {{settings.tasting_bar_bg}};
+
+  /* Sold out background */
+  --sold-out-bg: {{settings.sold_out_bg}};
+  --sold-out-bg-hover: {{settings.sold_out_bg_hover}};
+  --sold-out-text-hover: {{settings.sold_out_button_text_hover_color}};
+  --card-bg: {{settings.card_bg}};
+  --sold-out-border-radius: {{settings.sold_out_button_border_radius}}px;
+
+  /* Add to cart buttons */
+  --atc-bg: {{settings.atc_button_color}};
+  --atc: {{settings.atc_button_text_color}};
+  --atc-bg-hover: {{settings.atc_button_hover_color}};
+  --atc-text-hover: {{settings.atc_button_text_hover_color}};
+  --atc-border-radius: {{settings.atc_button_border_radius}}px;
+  --atc-border-color: {{settings.atc_button_border}};
+  --atc-font-weight: {{settings.atc_button_font.weight}};
+  --atc-font-size: {{settings.atc_button_font_size}}rem;
+  --atc-font-family: {{settings.atc_button_font.family}};
+  --atc-border-width: {{settings.atc_button_border_width}}px;
+
+  /* Button elements */
+  --button-primary: {{settings.button_text_color}};
+  --button-primary--hover: {{settings.button_text_color_hover}};
+  --button-primary--bg: {{settings.button_background}};
+  --button-primary--bg-hover: {{settings.button_background_hover}};
+  --button-primary--border: {{settings.button_border}};
+  --button-font: {{settings.button_font.family}};
+  --button-border-radius: {{settings.button_border_radius}}px;
+  --button-border-width: {{settings.button_border_width}}px;
+  --button-font-size: {{settings.button_font_size}}rem;
+
+  --button-secondary: {{settings.secondary_button_text_color}};
+  --button-secondary--hover: {{settings.secondary_button_text_color_hover}};
+  --button-secondary--bg: {{settings.secondary_button_background}};
+  --button-secondary--bg-hover: {{settings.secondary_button_background_hover}};
+  --button-secondary--border: {{settings.secondary_button_border}};
+  --button-secondary--border-radius: {{settings.secondary_button_border_radius}}px;
+  --button_font_secondary: {{settings.button_font_secondary.family}};
+  --button-secondary--border-width: {{settings.secondary_button_border_width}}px;
+  --secondary-button-font-size: {{settings.secondary_button_font_size}}rem;
+
+  --button-sold-out: {{settings.sold_out_button_text_color}};
+  --button-sold-out--bg: {{settings.sold_out_bg}};
+  --button-sold-out--border: {{settings.sold_out_button_border}};
+  --button_font_sold-out: {{settings.button_sold_out_font.family}};
+  --button-sold-out-border-width: {{settings.sold_out_button_border_width}}px;
+  --sold-out-button-font-size: {{settings.sold_out_button_font_size}}rem;
+
+  --button-disabled: {{settings.disabled_button_text_color}};
+  --button-disabled--bg: {{settings.disabled_bg}};
+  --button-disabled--border: {{settings.disabled_button_border}};
+  --button_disabled_font: {{settings.button_disabled_font.family}};
+  --button_border_width_disabled: {{settings.disabled_button_border_width}}px;
+  --button_border_radius_disabled: {{settings.disabled_button_border_radius}}px;
+  --button-disabled-text-hover: {{settings.disabled_button_text_hover_color}};
+  --sold-out-button-font-size: {{settings.disabled_button_font_size}}rem;
+
+/* form */
+ --focus-color: {{ settings.form_focus_color }};
+
+  /* Swiper carousel */
+ /* TODO: make this a setting somewhere */
+ --swiper-pagination-color: {{settings.button_background}};
+}
+
+::before, ::after {
+  /* Hero overlay */
+--color-image-overlay: {{ settings.image_overlay_color }};
+--opacity-image-overlay: .{{ settings.image_overlay_opacity }};
+}
+
+
+.TockLogo-container {
+  display: none !important;
+}

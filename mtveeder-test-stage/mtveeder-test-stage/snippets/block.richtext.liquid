@@ -1,0 +1,24 @@
+<section class="section"  style="background-color: {{block.settings.background_color }};" >
+  <div class="container-7xl">
+    <div class="text-center mx-auto max-w-md {% if block.settings.full_width %} max-w-4xl {% endif %}">
+      {% if block.settings.section_title != blank %}
+        <div class="mb-5">
+          <h2 class="text-2xl font-semibold">{{ block.settings.section_title | escape }}</h2>
+        </div>
+      {% endif %}
+      {% if block.settings.text != blank %}
+        <div class="rte">{{ block.settings.text }}</div>
+      {% endif %}
+      {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+        <div class="my-6">
+          <a href="{{ block.settings.button_link }}"  class="button-default" >
+            {{- block.settings.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+      {% if block.settings.text != blank and block.settings.vertical_rule %}
+        <hr class="h-16 w-px bg-rule-vertical mx-auto mt-4" />
+      {% endif %}
+    </div>
+  </div>
+</section>

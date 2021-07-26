@@ -1,0 +1,86 @@
+  {% capture image_layout %}
+    <div class="w-full md:w-6/12 flex">
+      {% if block.settings.image != blank %}
+      {% comment %}
+        Reuse this code if we ever need auto aspect-ratio behavior
+        {% capture img_id %}FeatureImage-{{ section.id }}{% endcapture %}
+      {% endcomment %}
+      {% capture wrapper_id %}FeatureImageWrapper-{{ section.id }}{% endcapture %}
+        {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+      {% comment %}
+        {% include 'image-style', image: block.settings.image, height: 545, wrapper_id: wrapper_id, img_id: img_id %}
+      {% endcomment %}
+      <div class="flex m-0 md:ml-0 w-full" id="{{ wrapper_id }}">
+          <img id="{{ img_id }}"
+               class="h-full object-cover feature-row__image lazyload w-full mx-0"
+               data-src="{{ img_url }}"
+               data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+               data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ block.settings.image.alt | escape }}">
+        </div>
+
+        <noscript>
+          {{ block.settings.image | img_url: '600x600', scale: 2 | img_tag: block.settings.image.alt, 'feature-row__image' }}
+        </noscript>
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+
+  {% capture text_section %}
+    {% assign text_alignment = "md:text-center" %}
+    {% case block.settings.text_alignment %}
+      {% when 'top_left' %}
+        {% assign text_alignment = '' %}
+      {% when 'top_center' %}
+        {% assign text_alignment = 'md:items-center md:text-center' %}
+      {% when 'top_right' %}
+        {% assign text_alignment = 'md:items-end md:text-right' %}
+      {% when 'center_left' %}
+       {% assign text_alignment = 'md:justify-center md:text-left' %}
+      {% when 'center_center' %}
+       {% assign text_alignment = 'md:justify-center md:items-center md:text-center' %}
+      {% when 'center_right' %}
+       {% assign text_alignment = 'md:justify-center md:items-end md:text-right' %}
+      {% when 'bottom_left' %}
+        {% assign text_alignment = 'md:justify-end' %}
+      {% when 'bottom_center' %}
+        {% assign text_alignment = 'md:justify-end md:items-center md:text-center' %}
+      {% when 'bottom_right' %}
+        {% assign text_alignment = 'md:justify-end md:items-end md:text-right' %}
+    {% endcase %}
+    <div class="{{ block.settings.layout }} text-{{block.settings.mobile_text_alignment}} p-12 flex flex-col w-full md:w-6/12  {{text_alignment}}">
+      {% if block.settings.title != blank %}
+      <h2 class="text-xl font-semibold mb-2">{{ block.settings.title | escape }}</h2>
+      {% endif %}
+      {% if block.settings.text != blank %}
+        <div class="rte">{{ block.settings.text }}</div>
+      {% endif %}
+      {% if block.settings.button_label != blank %}
+        {% if block.settings.membership_button %}
+          <a href="/apps/wine-club/account/customers/{{ customer.id }}"
+             class="btn button-default mt-4">
+            {{- block.settings.button_label | escape -}}
+          </a>
+        {% elsif block.settings.button_link != blank %}
+          <a href="{{ block.settings.button_link }}"
+             class="btn button-default mt-4">
+            {{- block.settings.button_label | escape -}}
+          </a>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="flex flex-wrap {% if block.settings.layout == "right" %}flex-col-reverse md:flex-row{% endif %}">
+    {% if block.settings.layout == "left" %}
+      {{ image_layout }}
+      {{ text_section }}
+    {% else %}
+      {{ text_section }}
+      {{ image_layout }}
+    {% endif %}
+  </div>

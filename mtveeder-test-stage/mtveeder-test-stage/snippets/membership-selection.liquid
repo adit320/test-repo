@@ -1,0 +1,129 @@
+{% assign image = block.settings.image %}
+{% assign title = block.settings.club_level_name %}
+{% assign price = block.settings.club_price %}
+{% assign text = block.settings.level_description %}
+{% assign html = block.settings.level_benefits %}
+{% assign button_label = block.settings.join_button_label %}
+{% assign to_join = block.settings.to_join %}
+{% assign button_link = block.settings.to_join_url %}
+{% assign product_options = block.settings.product_options %}
+
+<div class="{{ column_width }} pl-4 md:pl-6 mb-6 text-{{ alignment }}" data-club-signup="">
+  <div class="card shadow-xl h-full bg-white flex flex-col"  style="background-color: {{card_bg}};">
+    {% assign image_height = max_image_height %}
+    {% if image_height == blank %}
+      {% assign image_height = 575 %}
+    {% endif %}
+
+    {% assign unpadded = false %}
+    {% if image_padding == blank %}
+      {% assign unpadded = true %}
+    {% endif %}
+      {% if enable_image %}
+        <div class="{{image_padding}}">
+          {% render 'column-image',
+            image: image,
+            alignment: alignment,
+            id: id,
+            max_height: image_height,
+            max_image_width: max_image_width
+            unpadded: unpadded
+          %}
+        </div>
+      {% endif %}
+      <div class="p-8 pt-4">
+        {% if subtitle != blank %}
+          <h3 class="text-base font-semibold mb-1.5">{{ subtitle | escape }}</h3>
+        {% endif %}
+        {% if title != blank %}
+          <h2 class="font-semibold mb-2 text-3xl">{{ title | escape }}</h2>
+        {% endif %}
+        {% if price != blank %}
+          <h4 class="text-md-lg font-semibold mb-3.5">{{price}}</h4>
+        {% endif %}
+        {% if text != blank %}
+          <div class="rte {% if html != blank %}mb-2{%endif%}">{{ text }}</div>
+        {% endif %}
+      </div>
+
+    {% if html != blank %}
+      <div>
+          <div class="rte">{{html | html}}</div>
+      </div>
+    {% endif %}
+
+    {% if product_options != blank %}
+      <div class="pb-3">
+          {% render 'membership-options', block: block, section: section, checkout_option: checkout_option %}
+      </div>
+    {% endif %}
+
+
+    {% if block.settings.product_options and block.type == "multi_option" %}
+    <div class="flex justify-center items-center mt-auto h-14 md:h-11 w-full bg-secondary-bg cursor-pointer h-full w-full"
+         style="padding: {{section.settings.atc_button_margin}}em; padding-top: 0;"
+    >
+      <button class="flex justify-center items-center mt-auto h-14 md:h-11 w-full  button-secondary cursor-pointer h-full w-full"
+              onclick="joinClub({% if block.settings.level_variant_id != blank %}'{{ block.settings.level_variant_id }}'{% else %}null{% endif %}, this, '{{ checkout_option }}')"
+              style='
+                background-color: {{section.settings.atc_button_color}};
+                color: {{section.settings.atc_button_text_color}};
+                min-width: {{section.settings.atc_button_minimum_width}}%;
+                border-radius: {{section.settings.atc_button_border_radius}}px;
+                border-color: {{section.settings.atc_button_border}};
+                font-family: {{section.settings.atc_button_font.family}};
+                font-weight: {{section.settings.atc_button_font.weight}};
+                font-size: {{section.settings.atc_button_font_size}}px;
+                line-height: 1.7em;
+              '
+      >
+        {{ block.settings.join_button_label }}
+      </button>
+    </div>
+    {% elsif block.type == "single_option" %}
+      <div class="flex justify-center items-center mt-auto w-full bg-secondary-bg cursor-pointer w-full"
+           style="padding: {{section.settings.atc_button_margin}}em; padding-top: 0;"
+      >
+          <button class="Form__Submit py-3"
+                onclick="Bloom.storefront.utilities.addToCart({{ block.settings.level_variant_id }}, 1, {}, '{{checkout_option}}')"
+                style='
+                  background-color: {{section.settings.atc_button_color}};
+                  color: {{section.settings.atc_button_text_color}};
+                  min-width: {{section.settings.atc_button_minimum_width}}%;
+                  border-radius: {{section.settings.atc_button_border_radius}}px;
+                  border-color: {{section.settings.atc_button_border}};
+                  font-family: {{section.settings.atc_button_font.family}};
+                  font-weight: {{section.settings.atc_button_font.weight}};
+                  font-size: {{section.settings.atc_button_font_size}}px;
+                  line-height: 1.7em;
+                '
+          >
+            {{ block.settings.join_button_label }}
+          </button>
+      </div>
+      {% else %}
+        {% render 'membership-signup-properties' %}
+        <div class="flex justify-center items-center mt-auto w-full bg-secondary-bg cursor-pointer w-full"
+             style="padding: {{section.settings.atc_button_margin}}em; padding-top: 0;"
+        >
+            <button class="Form__Submit py-3"
+                  onclick="bloom.shoppingCart().add([{ id: getClubSignupProperties('{{ title }}').variantId, quantity: getClubSignupProperties('{{ title }}').quantity, properties: getClubSignupProperties('{{ title }}').attributes }]).then(bloom.reloadCart).then(bloom.showCart)"
+                  style='
+                    background-color: {{section.settings.atc_button_color}};
+                    color: {{section.settings.atc_button_text_color}};
+                    min-width: {{section.settings.atc_button_minimum_width}}%;
+                    border-radius: {{section.settings.atc_button_border_radius}}px;
+                    border-color: {{section.settings.atc_button_border}};
+                    font-family: {{section.settings.atc_button_font.family}};
+                    font-weight: {{section.settings.atc_button_font.weight}};
+                    font-size: {{section.settings.atc_button_font_size}}px;
+                    line-height: 1.7em;
+                  '
+            >
+              {{ block.settings.join_button_label }}
+            </button>
+        </div>
+    {% endif %}
+
+  </div>
+</div>

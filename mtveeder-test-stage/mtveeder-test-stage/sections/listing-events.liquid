@@ -1,0 +1,204 @@
+{%- assign image_padding = 'p-8 pb-0' -%}
+{% case section.settings.image_size %}
+  {% when "full" %}
+    {%- assign image_padding = '' -%}
+  {% when 'padded' %}
+  {%- assign image_padding = 'p-8 pb-0' -%}
+{% endcase %}
+
+<div class="section" style="background-color: {{section.settings.background_color }};">
+  <div class="container-7xl ">
+
+    {% assign card_count = 0 %}
+    {% for block in section.blocks %}
+      {% if block.type == "text_block" %}
+        {% assign card_count = card_count | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="flex flex-wrap justify-center -ml-4 -mb4">
+      {%- assign grid_item_width = 'w-full sm:w-full lg:w-1/2' -%}
+      {%- assign column_width = grid_item_width -%}
+
+      {% for block in section.blocks %}
+        {% if block.type == "header" %}
+    </div>
+      <div class="my-7 {% unless forloop.first %}
+        mt-16
+      {% endunless %} md:mb-12 text-center">
+          <h2 class="text-2xl font-semibold">{{block.settings.header}}</h2>
+      </div>
+    {% unless forloop.last %}
+    <div class="flex flex-wrap justify-center -ml-4 lg:-ml-6 -mb4">
+    {% endunless %}
+      {% else %}
+        {% render 'featured-card',
+          max_image_width: section.settings.image_width,
+          alignment: section.settings.align_text,
+          column_width: column_width,
+          image_padding: image_padding,
+          card_bg: section.settings.card_bg,
+          id: block.id,
+          image: block.settings.image,
+          title: block.settings.title,
+          text: block.settings.text,
+          button_label: block.settings.button_label,
+          button_link: block.settings.button_link,
+          enable_image: block.settings.enable_image,
+          use_tock_scheduler: block.settings.use_tock_scheduler,
+          tock_id: block.settings.tock_id,
+          end_date: block.settings.event_end_date
+        %}
+          {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% javascript %}
+  document.addEventListener("DOMContentLoaded", function(event){
+    document.querySelectorAll("[data-event-end-date]").forEach(function(element){
+      var endDate = new Date(element.dataset.eventEndDate);
+      if(endDate instanceof Date && !isNaN(endDate.valueOf())){
+        if(endDate < new Date()){
+          element.style.display = "none";
+        }
+      }
+    })
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Event cards",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuration"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "Alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background color",
+      "default": "#fff"
+    },
+    { 
+      "type": "range",
+      "id": "image_width",
+      "label": "Max image width",
+      "min": 30,
+      "max": 800,
+      "step": 10,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Padding",
+      "default": "padded",
+      "options": [
+        {
+          "value": "padded",
+          "label": "Padded"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_block",
+      "name": "Event",
+      "settings": [
+        {
+          "type": "text",
+          "id": "event_end_date",
+          "label": "Event end date",
+          "info": "Enter in the form dd-mm-yyyy hh:mm"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_image",
+          "label": "Show image",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Add a title or tagline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Describe your event.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_tock_scheduler",
+          "label": "Use Tock scheduler",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "tock_id",
+          "label": "Tock offering ID"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "name": "Header",
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Header"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

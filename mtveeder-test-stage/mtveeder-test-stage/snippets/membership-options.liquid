@@ -1,0 +1,73 @@
+{% if block.settings.product_options %}
+<div class="custom-button-grid-padding my-2" data-club-signup="">
+    <div>
+        <p class="mb-2"><strong>{{ block.settings.preference_dropdown_text }}</strong></p>
+        <select class="mt-3 mb-4" name="signup[option_name]">
+          {% if block.settings.option_one != blank %}
+            <option value="{{ block.settings.option_one }}">{{ block.settings.option_one_variant_label }}</option>{% endif %}
+          {% if block.settings.option_two != blank %}
+            <option value="{{ block.settings.option_two }}">{{ block.settings.option_two_variant_label }}</option>{% endif %}
+          {% if block.settings.option_three != blank %}
+            <option value="{{ block.settings.option_three }}">{{ block.settings.option_three_variant_label }}</option>{% endif %}
+          {% if block.settings.option_four != blank %}
+            <option value="{{ block.settings.option_four }}">{{ block.settings.option_four_variant_label }}</option>{% endif %}
+          {% if block.settings.option_five != blank %}
+            <option value="{{ block.settings.option_five }}">{{ block.settings.option_five_variant_label }}</option>{% endif %}
+          {% if block.settings.option_six != blank %}
+            <option value="{{ block.settings.option_six }}">{{ block.settings.option_six_variant_label }}</option>{% endif %}
+
+        </select>
+    </div>
+</div>
+
+
+{% else %}
+<div class="custom-button-grid-padding my-2 mb-2">
+    <div class="flex justify-center items-center mt-auto h-14 md:h-11 w-full bg-secondary-bg cursor-pointer h-full w-full"
+         style="padding: {{section.settings.atc_button_margin}}em;"
+    >
+        <button class="Form__Submit btn Button Button--primary btn--primary"
+            onclick="Bloom.storefront.utilities.addToCart({{ block.settings.level_variant_id }}, 1, {}, '{{checkout-option}}')"
+            style='
+              background-color: {{section.settings.atc_button_color}};
+              color: {{section.settings.atc_button_text_color}};
+              min-width: {{section.settings.atc_button_minimum_width}}px;
+              border-radius: {{section.settings.atc_button_border_radius}}px;
+              border-color: {{section.settings.atc_button_border}};
+              font-family: {{section.settings.atc_button_font.family}};
+              font-weight: {{section.settings.atc_button_font.weight}};
+              font-size: {{section.settings.atc_button_font_size}}px;
+            '
+        >
+            {{ block.settings.join_button_label }}
+        </button>
+    </div>
+
+</div>
+{% endif %}
+
+
+{% if block.type == "single_option" %}
+<div class="custom-button-grid-padding">
+    <div class="flex justify-center items-center mt-auto h-14 md:h-11 w-full bg-secondary-bg cursor-pointer h-full w-full"
+         style="padding: {{section.settings.atc_button_margin}}em;"
+    >
+        <button class="Form__Submit Button Button--primary btn btn--primary"
+            onclick="Bloom.storefront.utilities.addToCart({{ block.settings.option_one-variant-id }}, 1, { 'Selections': '{{ block.settings.option_one }}' }, '{{checkout-option}}')"
+            style='
+                background-color: {{section.settings.atc_button_color}};
+                color: {{section.settings.atc_button_text_color}};
+                min-width: {{section.settings.atc_button_minimum_width}}%;
+                border-radius: {{section.settings.atc_button_border_radius}}px;
+                border-color: {{section.settings.atc_button_border}};
+                font-family: {{section.settings.atc_button_font.family}};
+                font-weight: {{section.settings.atc_button_font.weight}};
+                font-size: {{section.settings.atc_button_font_size}}px;
+                line-height: {{section.settings.atc_button_font_size | plus: 4}}px;
+            '
+        >
+            {{ block.settings.join_button_label }}
+        </button>
+    </div>
+</div>
+{% endif %}

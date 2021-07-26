@@ -1,0 +1,16 @@
+<div class="space-x-2 flex justify-center {% unless no_bottom %} mb-8 {%endunless%}" style="color: {{star_color}};">
+  {% unless rating == -1 %}
+  {% assign remainder = rating | modulo: 2 %}
+  {% assign stars = rating | divided_by: 2 %}
+  {% assign stars_plus_one = stars | plus: 1 %}
+  {% for i in (1..5) %}
+      {% if i <= stars %}
+          <svg fill="currentColor"class="w-8 h-8" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>
+      {% elsif i == stars_plus_one and remainder == 1 %}
+          <svg fill="currentColor"class="w-8 h-8" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4V6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></svg>
+      {% else %}
+          <svg fill="currentColor" class="w-8 h-8" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"></path></svg>
+      {% endif %}
+  {% endfor %}
+  {% endunless %}
+</div>

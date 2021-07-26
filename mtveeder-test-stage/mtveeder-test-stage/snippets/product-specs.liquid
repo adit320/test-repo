@@ -1,0 +1,293 @@
+{% assign _card_color = settings.card_bg %}
+{% assign contained = contained %}
+{% if card_color != blank %}
+    {% assign _card_color = card_color %}
+{% endif %}
+
+{% comment %}
+ Carousel cards, visible only on mobile
+{% endcomment %}
+
+<div class="swiper-container md:hidden mb-6">
+  <div class="swiper-wrapper">
+    {% if product.metafields.bloom['bloomfields'].winemaker_notes != blank %}
+
+    {% capture heading %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% case settings.winemaker_image_size %}
+    {% when "full" %}
+    {%- assign image_padding = '' -%}
+    {% when 'padded' %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% endcase %}
+
+    {% if settings.winemaker_notes_icon != blank %}
+    <div class="{{image_padding}}" >
+        {% render 'column-image',
+        image: settings.winemaker_notes_icon,
+        alignment: settings.winemaker_align_text,
+        id: id,
+        max_height: 565,
+        max_image_width: settings.winemaker_image_width,
+        %}
+    </div>
+    {% endif %}
+    {% endcapture %}
+    {% capture content %}
+    <div class="flex flex-col">
+        {{product.metafields.bloom['bloomfields'].winemaker_notes}}
+    </div>
+    {% endcapture %}
+
+    {% render 'flexible-card', card_color: _card_color, heading: heading, content: content, carousel: true %}
+    {% endif %}
+
+    {% if product.metafields.bloom['bloomfields'].sensory_profile != blank %}
+    {% capture heading %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% case settings.sensory_profile_image_size %}
+    {% when "full" %}
+    {%- assign image_padding = '' -%}
+    {% when 'padded' %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% endcase %}
+    {% if settings.sensory_profile_icon != blank %}
+    <div class="{{image_padding}}">
+        {% render 'column-image',
+        image: settings.sensory_profile_icon,
+        alignment: settings.sensory_profile_align_text,
+        id: id,
+        max_height: 565,
+        max_image_width: settings.sensory_image_width,
+        carousel: true
+        %}
+    </div>
+    {% endif %}
+    {% endcapture %}
+    {% capture content %}
+    <div class="flex flex-col">
+        {{product.metafields.bloom['bloomfields'].sensory_profile}}
+    </div>
+    {% endcapture %}
+
+    {% render 'flexible-card', card_color: _card_color, heading: heading, content: content, carousel: true %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].tasting_notes != blank %}
+
+    {% capture heading %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% case settings.tasting_notes_image_size %}
+    {% when "full" %}
+    {%- assign image_padding = '' -%}
+    {% when 'padded' %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% endcase %}
+    {% if settings.tasting_notes_icon != blank %}
+    <div class="{{image_padding}}">
+        {% render 'column-image',
+        image: settings.tasting_notes_icon,
+        alignment: settings.tasting_notes_align_text,
+        id: id,
+        max_height: 565,
+        max_image_width: settings.tasting_notes_image_width,
+        carousel: true
+        %}
+    </div>
+    {% endif %}
+    {% endcapture %}
+    {% capture content %}
+    <div class="flex flex-col">
+        {{product.metafields.bloom['bloomfields'].tasting_notes}}
+    </div>
+    {% endcapture %}
+
+    {% render 'flexible-card', card_color: _card_color, heading: heading, content: content,  carousel: true %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].food_pairing != blank %}
+
+    {% capture heading %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% case settings.food_pairing_image_size %}
+    {% when "full" %}
+    {%- assign image_padding = '' -%}
+    {% when 'padded' %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% endcase %}
+    {% if settings.food_pairing_icon != blank %}
+    <div class="{{image_padding}}">
+        {% render 'column-image',
+        image: settings.food_pairing_icon,
+        alignment: settings.food_pairing_align_text,
+        id: id,
+        max_height: 565,
+        max_image_width: settings.food_pairing_image_width,
+        carousel: true
+        %}
+    </div>
+    {% endif %}
+    {% endcapture %}
+
+    {% capture content %}
+    <div class="flex flex-col">
+        {{product.metafields.bloom['bloomfields'].food_pairing}}
+    </div>
+    {% endcapture %}
+
+    {% render 'flexible-card', card_color: _card_color, heading: heading, content: content, carousel: true %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].sweetness != blank %}
+
+    {% capture content %}
+    {% render 'sweetness-bar', sweetness: product.metafields.bloom['bloomfields'].sweetness %}
+    {% endcapture %}
+
+    {% render 'flexible-card', card_color: _card_color, content: content, align_center: true, carousel: true %}
+
+    {% endif %}
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+
+{% comment %}
+    Non carousel cards, visible above the mobile breakpoint.
+{% endcomment %}
+<div class="hidden md:flex md:max-w-1/2 md:mx-auto lg:max-w-full flex-wrap pb-3 lg:space-x-4 flexible-grid">
+    {% if product.metafields.bloom['bloomfields'].winemaker_notes != blank %}
+
+    {% capture heading %}
+    {%- assign image_padding = 'p-8 pb-0' -%}
+    {% case settings.winemaker_image_size %}
+    {% when "full" %}
+        {%- assign image_padding = '' -%}
+    {% when 'padded' %}
+        {%- assign image_padding = 'p-8 pb-0' -%}
+    {% endcase %}
+
+    {% if settings.winemaker_notes_icon != blank %}
+    <div class="{{image_padding}}" >
+        {% render 'column-image',
+            image: settings.winemaker_notes_icon,
+            alignment: settings.winemaker_align_text,
+            id: id,
+            max_height: 565,
+            max_image_width: settings.winemaker_image_width
+        %}
+    </div>
+    {% endif %}
+        {% endcapture %}
+        {% capture content %}
+            <div class="flex flex-col">
+                {{product.metafields.bloom['bloomfields'].winemaker_notes}}
+            </div>
+        {% endcapture %}
+
+        {% render 'flexible-card', card_color: _card_color, heading: heading, content: content, heading_width:  %}
+    {% endif %}
+
+    {% if product.metafields.bloom['bloomfields'].sensory_profile != blank %}
+        {% capture heading %}
+        {%- assign image_padding = 'p-8 pb-0' -%}
+        {% case settings.sensory_profile_image_size %}
+        {% when "full" %}
+            {%- assign image_padding = '' -%}
+        {% when 'padded' %}
+            {%- assign image_padding = 'p-8 pb-0' -%}
+        {% endcase %}
+    {% if settings.sensory_profile_icon != blank %}
+        <div class="{{image_padding}}">
+        {% render 'column-image',
+            image: settings.sensory_profile_icon,
+            alignment: settings.sensory_profile_align_text,
+            id: id,
+            max_height: 565,
+            max_image_width: settings.sensory_image_width
+        %}
+        </div>
+    {% endif %}
+        {% endcapture %}
+        {% capture content %}
+        <div class="flex flex-col">
+            {{product.metafields.bloom['bloomfields'].sensory_profile}}
+        </div>
+        {% endcapture %}
+
+        {% render 'flexible-card', card_color: _card_color, heading: heading, content: content %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].tasting_notes != blank %}
+
+        {% capture heading %}
+        {%- assign image_padding = 'p-8 pb-0' -%}
+        {% case settings.tasting_notes_image_size %}
+        {% when "full" %}
+            {%- assign image_padding = '' -%}
+        {% when 'padded' %}
+            {%- assign image_padding = 'p-8 pb-0' -%}
+        {% endcase %}
+        {% if settings.tasting_notes_icon != blank %}
+            <div class="{{image_padding}}">
+                {% render 'column-image',
+                    image: settings.tasting_notes_icon,
+                    alignment: settings.tasting_notes_align_text,
+                    id: id,
+                    max_height: 565,
+                    max_image_width: settings.tasting_notes_image_width
+                %}
+            </div>
+        {% endif %}
+        {% endcapture %}
+        {% capture content %}
+        <div class="flex flex-col">
+            {{product.metafields.bloom['bloomfields'].tasting_notes}}
+        </div>
+        {% endcapture %}
+
+        {% render 'flexible-card', card_color: _card_color, heading: heading, content: content %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].food_pairing != blank %}
+
+        {% capture heading %}
+        {%- assign image_padding = 'p-8 pb-0' -%}
+        {% case settings.food_pairing_image_size %}
+        {% when "full" %}
+            {%- assign image_padding = '' -%}
+        {% when 'padded' %}
+            {%- assign image_padding = 'p-8 pb-0' -%}
+        {% endcase %}
+        {% if settings.food_pairing_icon != blank %}
+            <div class="{{image_padding}}">
+                {% render 'column-image',
+                    image: settings.food_pairing_icon,
+                    alignment: settings.food_pairing_align_text,
+                    id: id,
+                    max_height: 565,
+                    max_image_width: settings.food_pairing_image_width
+                %}
+            </div>
+        {% endif %}
+        {% endcapture %}
+
+        {% capture content %}
+        <div class="flex flex-col">
+            {{product.metafields.bloom['bloomfields'].food_pairing}}
+        </div>
+        {% endcapture %}
+
+        {% render 'flexible-card', card_color: _card_color, heading: heading, content: content %}
+
+    {% endif %}
+    {% if product.metafields.bloom['bloomfields'].sweetness != blank %}
+
+        {% capture content %}
+            {% render 'sweetness-bar', sweetness: product.metafields.bloom['bloomfields'].sweetness %}
+        {% endcapture %}
+
+        {% render 'flexible-card', card_color: _card_color, content: content, align_center: true %}
+
+    {% endif %}
+</div>
+

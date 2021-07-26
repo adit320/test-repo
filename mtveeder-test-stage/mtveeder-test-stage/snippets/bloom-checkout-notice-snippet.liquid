@@ -1,0 +1,44 @@
+{% comment %}
+This shop uses Bloom, a growth platform for modern wineries.
+You SHOULD NOT modify the contents of this file.
+It is automatically generated and your changes will be overwritten.
+These features and content can be managed within the Bloom app or the Shopify customizer.
+
+Bloom (www.bloom.wine)
+{% endcomment %}
+
+<div data-bloom-shipping-notice="" data-banner="true" role="alert" tabindex="-1" aria-atomic="true" aria-live="polite" class="notice notice--warning default-background" style="display: none">
+    <svg class="icon-svg icon-svg--size-24 notice__icon" aria-hidden="true" focusable="false">
+      <use xlink:href="#error">
+        <symbol id="error"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12zm0-2c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0-16c.552 0 1 .448 1 1v5c0 .552-.448 1-1 1s-1-.448-1-1V7c0-.552.448-1 1-1zm-1.5 10.5c0-.828.666-1.5 1.5-1.5.828 0 1.5.666 1.5 1.5 0 .828-.666 1.5-1.5 1.5-.828 0-1.5-.666-1.5-1.5z"></path></svg></symbol>
+      </use>
+    </svg>
+    <div class="notice__content">
+      {% if title != blank %}
+          <h2 class="notice__title" id="main-header" tabindex="-1" data-bloom-shipping-notice-title="">{{ title }}</h2>
+      {% endif %}
+      {% if message != blank %}
+          <p class="notice__text" data-bloom-shipping-notice-message="">{{ message }}</p>
+      {% endif %}
+    </div>
+  </div>
+  
+  <script>
+    window.Bloom = window.Bloom || {};
+    window.Bloom.storefront = window.Bloom.storefront || {};
+    window.Bloom.storefront.settings = window.Bloom.storefront.settings || {};
+    Bloom.storefront.settings.notices = {
+      shipping: {
+        enabled: {{ enabled }},
+        title: '{{ title }}',
+        message: '{{ message }}'
+      }
+    }
+    function handleEvent() {
+      var shippingAlert = document.querySelector('[data-bloom-shipping-notice]')
+      shippingAlert.style.display = (Bloom.storefront.settings.notices.shipping.enabled && Shopify.Checkout.step.includes("shipping")) ? "table" : "none";
+    }
+    document.addEventListener('page:load', handleEvent);
+    document.addEventListener('shopify:section:load', handleEvent);
+  </script>
+  

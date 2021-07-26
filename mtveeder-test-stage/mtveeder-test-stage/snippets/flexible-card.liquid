@@ -1,0 +1,26 @@
+{% capture card %}
+  <div class="h-full shadow-xl w-full {% if align_center %}flex flex-col justify-center{% endif %}" style="background-color: {{card_color}};">
+      <div class="flex flex-col">
+          {% if heading != blank %}
+          {{heading}}
+          {% endif %}
+          {% if content != blank %}
+          <div class="flex flex-col p-6">
+              {{content}}
+          </div>
+          {% endif %}
+      </div>
+  </div>
+{% endcapture %}
+
+{% if carousel %}
+<div class="swiper-slide flex">
+  <div class="h-full min-w-full {% if outer_padding %}p-8{% endif %}">
+    {{card}}
+  </div>
+</div>
+{% else %}
+<div class="min-w-full flex flex-1 lg:min-w-1/3-1r lg:px-0 mb-10 md:mb-4 flexible-card {% if outer_padding %}p-8{% endif %}">
+  {{card}}
+</div>
+{% endif %}

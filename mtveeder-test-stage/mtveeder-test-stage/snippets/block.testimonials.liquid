@@ -1,0 +1,51 @@
+<section class="section" id="section-{{ block.id }}" data-section-id="{{ block.id }}">
+  <div class="container-7xl overflow-hidden">
+    {% if block.settings.title != blank %}
+        <div class="mb-7 md:mb-12 text-center">
+          <h2 class="text-2xl font-semibold">{{ block.settings.title | escape }}</h2>
+        </div>
+      {% endif %}
+    <div class="TestimonialList Carousel" >
+
+      <div id="block-{{ block.id }}" class="w-full flex justify-center align-center text-center is-selected" {{ block.shopify_attributes }} >
+        <div class="mx-auto max-w-lg text-lg">
+          {%- if block.settings.quote_1 != blank -%}
+            {{ block.settings.quote_1 }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div id="block-{{ block.id }}" class="w-full flex justify-center align-center text-center" {{ block.shopify_attributes }} >
+        <div class="mx-auto max-w-lg text-lg">
+          {%- if block.settings.quote_2 != blank -%}
+            {{ block.settings.quote_2 }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div id="block-{{ block.id }}" class="w-full flex justify-center align-center text-center" {{ block.shopify_attributes }} >
+        <div class="mx-auto max-w-lg text-lg">
+          {%- if block.settings.quote_3 != blank -%}
+            {{ block.settings.quote_3 }}
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="TestimonialNav Carousel__ButtonGroup">
+        <img class="w-24 md:w-36 TestimonialNav__Item Carousel__Button is-selected" src="{{ block.settings.logo_1 | img_url: '300x' }}" alt="{{ block.settings.logo_1.alt | escape }}" data-index="{{ forloop.index0 }}">
+        <img class="w-24 md:w-36 TestimonialNav__Item Carousel__Button " src="{{ block.settings.logo_2 | img_url: '300x' }}" alt="{{ block.settings.logo_2.alt | escape }}" data-index="{{ forloop.index0 }}">
+        <img class="w-24 md:w-36 TestimonialNav__Item Carousel__Button " src="{{ block.settings.logo_3 | img_url: '300x' }}" alt="{{ block.settings.logo_3.alt | escape }}" data-index="{{ forloop.index0 }}">
+    </div>
+  </div>
+
+</section>
+
+<style>
+  #section-{{ block.id }} {
+    background: {{ block.settings.background }};
+  }
+</style>
+

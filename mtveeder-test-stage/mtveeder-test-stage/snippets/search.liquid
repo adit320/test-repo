@@ -1,0 +1,75 @@
+<div x-show="isSearchOpen()" 
+@click.away="closeSearch()"
+x-transition:enter="transition ease-out duration-100" 
+x-transition:enter-start="transform opacity-0 scale-95" 
+x-transition:enter-end="transform opacity-100 scale-100" 
+x-transition:leave="transition ease-in duration-75" 
+x-transition:leave-start="transform opacity-100 scale-100" 
+x-transition:leave-end="transform opacity-0 scale-95" 
+style="display: none; background-color: {{background_color}};"
+class="absolute top-full right-0 left-0 w-full origin-top-right z-30">
+<!-- x-data="contactForm()" -->
+  <div class="px-4 py-4">
+    
+    <form action="/search"  method="get" role="search" >
+      <div>
+        <div class="mt-1 relative rounded-md shadow-sm w-80 mx-auto">
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <!-- Heroicon name: solid/mail -->
+            {%- render 'icon', icon: 'search',  icon_class: 'h-5 w-5 text-gray-400' -%}
+          </div>
+          <input type="hidden" name="type" value="product" />
+          <input aria-label="search" type="search" name="q" value="{{ search.terms | escape }}" class=" block w-full pr-10 sm:text-sm" placeholder="Search"
+             style="background-color: {{background_color}};"
+          >
+        </div>  
+      </div>
+      <!-- <button type="submit" class="button-secondary mx-auto block mt-4">Search</button> -->
+    </form>
+      {%- comment -%}
+      TODO: Make search ajax
+      <form action="/search"    @submit.prevent="submitData" method="get" role="search">
+            <div>
+              <div class="mt-1 relative rounded-md shadow-sm w-60 ml-auto">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <!-- Heroicon name: solid/mail -->
+                  {%- render 'icon', icon: 'search',  icon_class: 'h-5 w-5 text-gray-400' -%}
+                </div>
+                <input type="search"  name="q" x-model="formData.q" class=" block w-full pl-10 sm:text-sm border-gray-300 rounded-md" placeholder="Red Blend"
+                  style="background-color: {{background_color}};"
+                >
+              </div>  
+            </div>
+          </form>
+      {%- endcomment -%}
+    <!-- <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="searchResults" >
+      
+    </div> -->
+  </div>
+</div>
+{%- comment -%}
+<script>
+  function contactForm() {
+    return {
+      formData: {
+        q: ''
+      },
+      results: '',
+          
+     async  submitData() {
+        const _this = this
+        await fetch(`/search?view=ajax&q=${this.formData.q}&type=product`)
+        .then(function(response) {
+            return response.text();
+        }).then(function(string) {
+          console.log(this)
+          const resultItem = document.getElementById("searchResults");
+          resultItem.innerHTML = string;
+          _this.results = string
+         
+        });
+      }
+    }
+  }
+</script>
+{%- endcomment -%}

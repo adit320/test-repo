@@ -1,0 +1,163 @@
+@layer base {
+  /* TODO: make these variables rather than default colors like navbar buttons */
+  .button-default, .TockButton, .btn, .button {
+    transition: background-color 0.2s ease-in-out;
+    @apply min-w-40 ;
+    @apply text-center ;
+    @apply items-center ;
+    @apply px-4 ;
+    @apply py-3 ;
+    @apply border-2 ;
+    @apply text-sm ;
+    @apply inline-block;
+    @apply bg-button-primary-bg;
+    @apply text-button-primary;
+    @apply font-button-default;
+    border-color: var(--button-primary--border);
+    @apply hover:text-button-primary-hover;
+    @apply hover:bg-button-primary-bghover;
+    @apply hover:shadow-xl;
+    border-radius: var(--button-border-radius);
+    border-width: var(--button-border-width);
+    font-size: var(--button-font-size);
+    line-height: calc(var(--button-font-size) + 4px);
+    cursor: pointer;
+  }
+  .button-default:disabled,
+  .button-secondary:disabled,
+  .button-disabled, .button:disabled, .btn:disabled{
+    @apply min-w-40 ;
+    @apply text-center ;
+    @apply items-center ;
+    @apply px-4 ;
+    @apply py-3 ;
+    @apply border-2 ;
+    @apply text-sm ;
+    @apply inline-block;
+    font-family: var(--button_disabled_font) !important; 
+    color: var(--button-disabled) !important;
+    background-color: var(--button-disabled--bg) !important;
+    border-color: var(--button-disabled--border) !important;
+    border-width: var(--button_border_width_disabled) !important;
+    border-radius: var(--button_border_radius_disabled) !important;
+    font-size: var(--sold-out-button-font-size));
+    line-height: calc(var(--sold-out-button-font-size) + 4px);
+    cursor: default;
+    box-shadow: none !important;
+  }
+
+  .button-secondary {
+    @apply min-w-40 ;
+    @apply text-center ;
+    @apply items-center ;
+    @apply px-4 ;
+    @apply py-3 ;
+    /*@apply border-2 ; */
+    @apply border-gray-800;
+    @apply text-sm;
+    @apply font-button-secondary;
+    @apply inline-block;
+    @apply text-button-secondary;
+    @apply bg-button-secondary-bg;
+    @apply hover:text-button-secondary-hover;
+    @apply hover:bg-button-secondary-bghover;
+    @apply hover:shadow-xl;
+    border-color: var(--button-secondary--border);
+    border-width: var(--button-secondary--border-width);
+    border-radius: var(--button-secondary--border-radius);
+    font-size: var(--secondary-button-font-size);
+    line-height: calc(var(--secondary-button-font-size) + 4px);
+  }
+
+  .button-sold-out {
+    @apply min-w-40 ;
+    @apply text-center ;
+    @apply items-center ;
+    @apply px-4 ;
+    @apply py-3 ;
+    @apply border-2 ;
+    @apply text-sm;
+    @apply font-button-sold_out;
+    @apply inline-block;
+    @apply text-button-sold_out;
+    @apply bg-button-sold_out-bg;
+    @apply hover:bg-button-sold_out-bghover;
+    @apply hover:text-button-sold_out-hover;
+    border-color: var(--button-sold-out--border);
+    border-width: var(--button-sold-out-border-width);
+    border-radius: var(--sold-out-border-radius);
+    font-size: var(--sold-out-button-font-size);
+    line-height: calc(var(--sold-out-button-font-size) + 4px);
+    cursor: default;
+  }
+
+  .button-add-to-cart {
+    @apply bg-button-add_to_cart-bg;
+    @apply hover:bg-button-add_to_cart-bghover;
+    @apply text-button-add_to_cart;
+    @apply hover:text-button-add_to_cart-hover;
+    @apply font-button-add-to-cart;
+    @apply px-4;
+    @apply py-3;
+    border-color: var(--atc-border-color);
+    border-width: var(--atc-border-width);
+    border-radius: var(--atc-border-radius);
+    font-size: var(--atc-font-size);
+    line-height: calc(var(--atc-font-size) + 4px);
+  }
+
+  .navbar-button {
+    @apply px-4;
+    @apply py-6;
+    @apply rounded-md;
+    @apply text-sm;
+  }
+
+  .navbar-icon-button {
+    @apply p-5;
+    @apply mr-0.5;
+  }
+
+  .sidebar-button {
+    @apply block;
+    @apply px-3;
+    @apply py-2;
+    @apply rounded-md;
+    @apply text-2xl;
+  }
+
+  .hero__btn {
+    @apply min-w-40 ;
+    @apply block;
+    @apply px-3;
+    @apply py-2;
+    @apply text-2xl;
+    @apply bg-white;
+    @apply text-sm;
+    @apply text-body-color;
+  }
+
+  .tock-button {
+    position: absolute;
+    top: 0;
+    display: inline-block;
+    margin-right: auto;
+    margin-left: auto;
+    pointer-events: none;
+  }
+
+  /*
+  TODO: We'll need a way to control shadows via the Shopify customizer to
+  customize this rather than using a Tailwind class
+   */
+  button:focus,
+  .button-default:focus,
+  .button-secondary:focus {
+    outline: 0;
+  }
+
+  button {
+    font-weight: inherit;
+  }
+}
+

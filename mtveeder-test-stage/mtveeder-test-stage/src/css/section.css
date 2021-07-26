@@ -1,0 +1,6 @@
+@layer base {
+  .section {
+    @apply py-7;
+    @apply sm:py-12;
+  }
+}

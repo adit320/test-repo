@@ -1,0 +1,17 @@
+development:
+  password: ${MV_SHOPIFY_API_PASSWORD}
+  theme_id: ${MV_DEVELOPMENT_THEME_ID}
+  store: mtveeder-test.myshopify.com
+production:
+  password: ${MV_SHOPIFY_API_PASSWORD}
+  theme_id: ${MV_PRODUCTION_THEME_ID}
+  store: mtveeder-test.myshopify.com
+  timeout: 60s
+  ignore_files:
+    - config/settings_data.json
+staging:
+  password: ${MV_SHOPIFY_API_PASSWORD}
+  theme_id: ${MV_STAGING_THEME_ID}
+  store: mtveeder-test.myshopify.com
+  ignore_files:
+    - config/settings_data.json

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="text-mobile-body md:text-body body-font-color mobile-body-line-height md:desktop-body-line-height body-weight" :class="{ 'overflow-hidden': isMobileOpen() }" x-data="alpineGlobal()">
+<head>
+  <title>{{ page_title }}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="{{ page_description | escape }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="icon" href="{{settings.favicon | img_url}}">
+  <link rel="preload" href="{{ 'lazysizes.js' | asset_url }}" as="script">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+  {% if settings.tock_subdomain != blank %}
+  <!-- Tock -->
+  <script>
+    !function(t,o,c,k){if(!t.tock){var e=t.tock=function(){e.callMethod?    e.callMethod.apply(e,arguments):e.queue.push(arguments)};t._tock||(t._tock=e),    e.push=e,e.loaded=!0,e.version='1.0',e.queue=[];var f=o.createElement(c);f.async=!0,    f.src=k;var g=o.getElementsByTagName(c)[0];g.parentNode.insertBefore(f,g)}}(    window,document,'script','https://www.exploretock.com/tock.js');    tock('init', '{{settings.tock_subdomain}}');
+  </script>
+  {% endif %}
+
+  {{ content_for_header }} <!-- Header hook for plugins -->
+  {% if settings.development_mode %}
+  {{ 'development.js' | asset_url | script_tag }}
+  {% else %}
+  {{ 'production.js' | asset_url | script_tag }}
+  {% endif %}
+  <!-- Tailwind is injected as a script tag, not loaded as its own file -->
+  {{ 'application.css' | asset_url | stylesheet_tag }}
+  {{ 'application.js' | asset_url | script_tag }}
+
+  <script src="{{ 'lazysizes.js' | asset_url }}" async="async"></script>
+
+  <!-- Alpine initialization -->
+  <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+
+  {% capture snippet_content %}{% render 'scripts-head' %}{% endcapture %}
+  {% unless snippet_content contains "Liquid error" %}
+    {{ snippet_content }}
+  {% endunless %}
+
+
+  <!-- Load Bloom theme logic for is-member, etc. ========================= -->
+  <!-- {% include 'bloom' %} -->
+
+{% comment %} {% render 'bloom-header' %} {% endcomment %}
+
+</head>
+<body class="bg-page">
+  {% capture snippet_content %}{% render 'scripts-body-start' %}{% endcapture %}
+  {% unless snippet_content contains "Liquid error" %}
+    {{ snippet_content }}
+  {% endunless %}
+  
+  <div class="sticky w-full top-0 left-0 z-50">
+    {% comment %} {% section 'bloom-age-gate-section' %} {% endcomment %}
+    {% section 'announcement' %}
+    {% section 'navbar' %}
+    {% comment %} {% section 'bloom-cart-panel-section' %} {% endcomment %}
+  </div>
+  <main   role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+  <script>
+    window.isTouchDevice = function isTouchDevice() {
+              return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+            }
+    function alpineGlobal() {
+        return {
+            mobileOpen: false,
+            searchOpen: false,
+            toggleMobile() { this.mobileOpen = !this.mobileOpen },
+            closeMobile() { this.mobileOpen = false },
+            isMobileOpen() { return this.mobileOpen === true },
+            toggleSearch() { this.searchOpen = !this.searchOpen },
+            closeSearch() { this.searchOpen = false },
+            isSearchOpen() { return this.searchOpen === true }
+            
+        }
+    }
+</script>
+<!--  -->
+{% capture snippet_content %}{% render 'scripts-body-end' %}{% endcapture %}
+{% unless snippet_content contains "Liquid error" %}
+  {{ snippet_content }}
+{% endunless %}
+</body>
+</html>

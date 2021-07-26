@@ -1,0 +1,21 @@
+{% if product.metafields.bloom['bloomfields'].awards_and_accolades != blank %}
+	{% assign wiziwig_split = product.metafields.bloom['bloomfields'].awards_and_accolades | split: '<p>--------------------</p>' %}
+	{% assign simple_awards_acc = wiziwig_split[1] | split: '<p>----------</p>' %}
+
+	<div class="flex justify-center mb-4">
+		{% for award_details in simple_awards_acc %}
+			{%- assign details_split = award_details | split: '</p><p>' -%}
+			{%- assign points = details_split[0] | remove: '<p>' | strip -%}
+			{%- assign author_initials = details_split[1] | remove: '</p>' | strip -%}
+
+			<div class="flex align-items-end mr-3">
+				{% render 'column-image',
+					image: settings.awards_accolades_icon,
+					max_image_width: '25',
+				%}
+				<span class="font-bold mr-1 text-2xl text-heading-color">{{ points }}</span>
+				<span>{{ author_initials }}</span>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}

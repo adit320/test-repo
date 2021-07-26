@@ -1,0 +1,123 @@
+{%- assign social_media_count = 0 -%}
+
+{%- capture social_media -%}
+
+  {%- if settings.social_instagram != blank -%}
+    <li>
+      <a href="{{ settings.social_instagram | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Instagram">
+        {%- render 'icon', icon: 'instagram', icon_class: 'w-6 h-6' -%}
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+    {%- if settings.social_twitter != blank -%}
+    <li>
+      <a href="{{ settings.social_twitter | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Twitter">
+        {%- render 'icon', icon: 'twitter', icon_class: 'w-6 h-6' -%}
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+    {%- endif -%}
+
+  {%- if settings.social_facebook != blank -%}
+    <li>
+      <a href="{{ settings.social_facebook | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Facebook">
+        {%- render 'icon', icon: 'facebook', icon_class: 'w-6 h-6' -%}
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_pinterest != blank -%}
+    <li>
+      <a href="{{ settings.social_pinterest | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Pinterest">
+        {%- render 'icon', icon: 'pinterest', icon_class: 'w-6 h-6' -%}
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_youtube != blank -%}
+    <li>
+      <a href="{{ settings.social_youtube | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="YouTube">
+        {%- render 'icon', icon: 'youtube', icon_class: 'w-6 h-6' -%}
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_vimeo != blank -%}
+    <li>
+      <a href="{{ settings.social_vimeo | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Vimeo">
+       {%- render 'icon', icon: 'vimeo', icon_class: 'w-6 h-6' -%}>
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_linkedin != blank -%}
+    <li>
+      <a href="{{ settings.social_linkedin | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="LinkedIn">
+       {%- render 'icon', icon: 'linkedin', icon_class: 'w-6 h-6' -%}>
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_snapchat != blank -%}
+    <li>
+      <a href="{{ settings.social_snapchat | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="SnapChat">
+       {%- render 'icon', icon: 'snapchat', icon_class: 'w-6 h-6' -%}>
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_tumblr != blank -%}
+    <li>
+      <a href="{{ settings.social_tumblr | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Tumblr">
+       {%- render 'icon', icon: 'tumblr', icon_class: 'w-6 h-6' -%}>
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+
+  {%- if settings.social_fancy != blank -%}
+    <li>
+      <a href="{{ settings.social_fancy | replace_first: 'https://', '' | replace_first: 'http://', '' | prepend: 'https://' }}" class="footer-social-button rounded-full p-2 inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" target="_blank" rel="noopener" aria-label="Fancy">
+       {%- render 'icon', icon: 'fancy', icon_class: 'w-6 h-6' -%}>
+      </a>
+    </li>
+
+    {% assign social_media_count = social_media_count | plus: 1 %}
+  {%- endif -%}
+{%- endcapture -%}
+
+
+{%- if social_media_count > 0 -%}
+  <ul id="social-media-{{block.id}}" class="flex justify-center space-x-4 list-none pl-0" style="color: {{block.settings.footer_social_icon_color}}">
+    {{ social_media }}
+  </ul>
+{%- endif -%}
+
+<style>
+  #social-media-{{ block.id }} .footer-social-button {
+    color: {{block.settings.footer_social_button}};
+    background-color: {{block.settings.footer_social_button_bg}};
+  }
+
+  #social-media-{{ block.id }} .footer-social-button:hover {
+    color: {{block.settings.footer_social_button_hover}};
+    background-color: {{block.settings.footer_social_button_bghover}};
+  }
+</style>

@@ -1,0 +1,36 @@
+@layer base {
+  .container-3xl {
+    @apply max-w-3xl;
+    @apply mx-auto;
+    @apply px-4;
+    @apply sm:px-6;
+    @apply lg:px-8;
+  }
+
+  .container-6xl {
+    @apply max-w-6xl;
+    @apply mx-auto;
+    @apply px-4;
+    @apply sm:px-6;
+    @apply lg:px-8;
+  }
+
+  .container-7xl {
+    @apply max-w-7xl;
+    @apply mx-auto;
+    @apply px-4;
+    @apply sm:px-6;
+    @apply lg:px-8;
+  }
+
+  .container-full {
+    @apply max-w-full;
+    @apply mx-auto;
+  }
+
+  .container-large-max-screen {
+    @apply lg:max-w-screen-lg;
+    @apply xl:max-w-screen-xl;
+    @apply mx-auto;
+  }
+}

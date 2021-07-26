@@ -1,0 +1,31 @@
+<!-- /templates/customers/activate_account.liquid -->
+<section class="py-32 md:py-40">
+  <div class="container-7xl">
+    <div class="max-w-sm mx-auto">
+      <header class="text-center mb-12">
+        <h1 class="text-header text-3xl md:text-4xl mb-3">{{ 'customer.activate_account.title' | t }}</h1>
+        <p class="Form__Legend">{{ 'customer.activate_account.description' | t }}</p>
+      </header>
+
+      {% form 'activate_customer_password' %}
+        <div class="mb-3">
+          {{ form.errors | default_errors }}
+        </div>
+        <div class="mb-3">
+          <label for="password">Password</label>
+          <input type="password" class="w-full" name="customer[password]" />
+        </div>
+        <div class="mb-5">
+          <label for="password_confirmation">Password Confirmation</label>
+          <input type="password" class="w-full" name="customer[password_confirmation]" />
+        </div>
+        
+        <input type="submit" class="button-default inline-block mb-2" value="Activate Account" />
+        <div>
+          <span>or</span>
+          <input type="submit" class="text-sm text-link  cursor-pointer bg-transparent" name="decline" value="Decline Invitation" />
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</section>

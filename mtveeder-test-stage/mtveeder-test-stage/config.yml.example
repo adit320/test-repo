@@ -1,0 +1,25 @@
+development:
+  password: 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
+  theme_id: "SOME-THEME-ID"
+  store: testrmw.myshopify.com
+  ignore_files:
+  - config/settings_data.json
+  - bloom-*.liquid
+  - assets/*bloom-*
+  - snippets/scripts-body-end.liquid
+  - snippets/scripts-body-start.liquid
+  - snippets/scripts-head.liquid
+  - locales/
+
+production:
+  password: some-password
+  theme_id: "SOME-THEME-ID"
+  store: example.myshopify.com
+  ignore_files:
+  - config/settings_data.json
+  - bloom-*.liquid
+  - assets/*bloom-*
+  - snippets/scripts-body-end.liquid
+  - snippets/scripts-body-start.liquid
+  - snippets/scripts-head.liquid
+  - locales/

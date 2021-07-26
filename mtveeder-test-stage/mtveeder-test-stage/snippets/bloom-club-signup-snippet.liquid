@@ -1,0 +1,274 @@
+{% comment %}
+This shop uses Bloom, a growth platform for modern wineries.
+You SHOULD NOT modify the contents of this file.
+It is automatically generated and your changes will be overwritten.
+These features and content can be managed within the Bloom app or the Shopify customizer.
+
+Bloom (www.bloom.wine)
+{% endcomment %}
+
+{%- assign club_level_id = "club-" | append: club_id -%}
+{%- if level_id != blank -%}
+  {%- assign club_level_id = club_level_id | append: '-level-' | append: level_id -%}
+{%- endif -%}
+
+{%- for club in shop.metafields.bloom.clubs -%}
+  {%- for club_field in club -%}
+    {%- if club_field[0] == "id" -%}
+      {%- assign club_id_prefix = "club-" | append: club_field[1] -%}
+    {%- endif -%}
+    {%- break -%}
+  {%- endfor -%}
+  {%- if club_level_id contains club_id_prefix -%}
+    {%- assign selected_club = club -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- for club_field in selected_club -%}
+  {%- if club_field[0] == "id" -%}
+    {%- assign club_id_prefix = "club-" | append: club_field[1] -%}
+  {%- endif -%}
+  {%- if club_field[0] == "name" -%}
+    {%- assign club_name = club_field[1] -%}
+  {%- endif -%}
+  {%- if club_field[0] == "product_handle" -%}
+    {%- assign product_handle = club_field[1] -%}
+  {%- endif -%}
+  {%- if club_field[0] == "levels" -%}
+    {%- if club_id_prefix == club_level_id -%}
+      {%- assign number_of_levels = club_field[1] | size -%}
+    {%- else -%}
+      {%- assign number_of_levels = 1 -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% assign product = all_products[product_handle] %}
+
+{%- if club_level_id contains "All" -%}
+{%- else -%}
+{%- endif -%}
+
+{%- if class == blank -%}
+  {%- assign class = 'Bloom__ClubSignup__Default' -%}
+{%- endif -%}
+
+{%- for field in shop.metafields.bloom.bloomfields -%}
+  {%- if field[0] == "settings" -%}
+    {%- for setting in field[1] -%}
+      {%- if setting[0] == "app_proxy_path" -%}
+        {%- assign app_proxy_path = setting[1] -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="uk-scope">
+  <div class="uk-container uk-container-medium Bloom__Signup__Container">
+
+      <form method="post" action="{{ app_proxy_path }}/api/members" class="{{ class }} Bloom__Signup__Form signup-form" data-bloom-club-signup="">
+
+        <div id="error_explanation" class="{{ error_class }}" data-bloom-club-signup-error="" style="display: none">
+        </div>
+
+        <input type="hidden" name="welcome_url" value="{{ welcome_page_path }}" />
+
+        <div class="uk-grid uk-grid-medium Bloom__Signup__Fields">
+
+          {% if customer.first_name == blank %}
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_first_name">First name</label>
+              <input type="text" class="uk-width-1-1" name="member[first_name]" autocapitalize="words" value="">
+            </div>
+          {% endif %}
+
+          {% if customer.last_name == blank %}
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_last_name">Last name</label>
+              <input type="text" class="uk-width-1-1" name="member[last_name]" autocapitalize="words" value="">
+            </div>
+          {% endif %}
+
+          {% if customer.email == blank %}
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_email">Email</label>
+              <input type="email" class="uk-width-1-1" name="member[email]" autocapitalize="words" value="">
+            </div>
+          {% else %}
+            <input type="hidden" name="member[email]" value="{{ customer.email }}" />
+          {% endif %}
+
+          {% if customer.phone == blank %}
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_phone">Phone</label>
+              <input type="phone" id="member_phone" class="uk-width-1-1" name="member[phone]" autocapitalize="off" value="{{ customer.phone }}">
+            </div>
+          {% endif %}
+
+          {% if customer == blank and show_password == true %}
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_password">Password</label>
+              <input type="password" class="uk-width-1-1" name="member[password]" autocapitalize="off" value="">
+            </div>
+
+            <div class="uk-width-1-1 uk-width-1-2@s uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_password_confirmation">Password confirmation</label>
+              <input type="password" class="uk-width-1-1" name="member[password_confirmation]" autocapitalize="off" value="">
+            </div>
+          {% endif %}
+
+          {% if show_dob == true %}
+            <div class="uk-width-1-1 uk-margin-bottom Bloom__Signup__Field">
+              <label for="member_date_of_birth">Date of birth</label>
+              {%- render 'bloom-date-input-snippet',
+                wrapper_class: 'uk-grid',
+                input_wrapper_class: 'uk-width-1-3',
+                input_class: 'uk-width-1-1',
+                year_input_name: "member[date_of_birth(1i)]"
+                month_input_name: "member[date_of_birth(2i)]"
+                day_input_name: "member[date_of_birth(3i)]",
+                date: cart.attributes['Customer date of birth'] -%}
+            </div>
+          {% endif %}
+        </div>
+
+          <div class="{{ signup_container_class }} Bloom__Signup__Clubs">
+            <input type="hidden" name="club" value="{{ club_name }}" data-bloom-club-signup-club="" />
+            <input type="hidden" name="target" value="{{ section_settings.add_to_cart_target }}" data-bloom-club-signup-target="" />
+            <input type="hidden" name="default_variant" value="{{ product.first_available_variant.id }}" data-bloom-club-signup-default-variant="" />
+
+            {%- assign selected_level = blank -%}
+            {%- for club_field in selected_club -%}
+              {%- if club_field[0] == "levels" -%}
+                {%- assign selected_level_index = 1 -%}
+                {%- for level in club_field[1] -%}
+                  {%- assign current_level_index = forloop.index -%}
+                  {%- for level_field in level -%}
+                    {%- if level_field[0] == "id" -%}
+                      {%- assign level_id = level_field[1] -%}
+                      {%- assign level_id_prefix = "level-" | append: level_field[1] -%}
+                      {%- if club_level_id contains level_id_prefix -%}
+                        {%- assign selected_level = level -%}
+                        {%- assign selected_level_index = current_level_index -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+
+            {%- if selected_level != blank -%}
+
+              {%- for level_field in selected_level -%}
+                {%- if level_field[0] == "name" -%}
+                  {%- assign selected_level_name = level_field[1] -%}
+                {%- endif -%}
+                {%- if level_field[0] == "id" -%}
+                  {%- assign selected_level_id = level_field[1] -%}
+                {%- endif -%}
+              {%- endfor -%}
+              <input type="hidden" name="member[memberships_attributes][][membership_level_id]" value="{{ selected_level_id }}" data-bloom-club-signup-level="" />
+            {%- else -%}
+              <select name="variant" name="member[memberships_attributes][][membership_level_id]" class="{{ section_settings.select_element_class }} {{ inner_block.settings.select_element_class }}" data-bloom-club-signup-variant="">
+                {%- for club_field in selected_club -%}
+                  {%- if club_field[0] == "levels" -%}
+                    {%- for level in club_field[1] -%}
+                      {%- for level_field in level -%}
+                        {%- if level_field[0] == "name" -%}
+                          {%- assign level_name = level_field[1] -%}
+                        {%- endif -%}
+                        {%- if level_field[0] == "id" -%}
+                          {%- assign level_id = level_field[1] -%}
+                        {%- endif -%}
+                        {%- if level_field[0] == "variant_id" -%}
+                          {%- assign variant_id = level_field[1] -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- if variant_id != blank -%}
+                        {%- assign option_value = variant_id -%}
+                      {%- else -%}
+                        {%- assign option_value = level_name -%}
+                      {%- endif -%}
+                      <option value="{{ level_id }}" data-bloom-club-signup-option="{{ variant_id }}">{{ level_name }}</option>
+                    {%- endfor -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </select>
+            {%- endif -%}
+
+          {% if show_options == true %}
+            {%- for club_field in selected_club -%}
+              {%- if club_field[0] == "levels" -%}
+                {%- for level in club_field[1] -%}
+                  {%- for level_field in level -%}
+                    {%- if level_field[0] == "id" -%}
+                      {%- assign level_id = level_field[1] -%}
+                      {%- assign level_id_prefix = "level-" | append: level_field[1] -%}
+                    {%- endif -%}
+                    {%- if level_field[0] == "name" -%}
+                      {%- assign level_name = level_field[1] -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- comment -%}
+                    club_id_prefix: {{ club_id_prefix }}<br>
+                    club_level_id: {{ club_level_id }}<br>
+                    level_id_prefix: {{ level_id_prefix }}<br>
+                  {%- endcomment -%}
+                  {%- if club_level_id == club_id_prefix or club_level_id contains level_id_prefix -%}
+                    <div class="Bloom__Signup__Options" data-bloom-club-signup-options="{{ level_id }}" {%- unless forloop.index == selected_level_index -%}style="display: none"{%- endunless -%}>
+                      {%- for level_field in level -%}
+                        {%- if level_field[0] == "releases" -%}
+                          {%- for release in level_field[1] -%}
+                            {%- for release_field in release -%}
+                              {%- if release_field[0] == "name" -%}
+                                <p class="Bloom__Signup__ReleaseName"><strong>{{ release_field[1] }}</strong></p>
+                              {%- endif -%}
+                              {%- if release_field[0] == "options" -%}
+                                {%- for option in release_field[1] -%}
+                                  {%- for option_field in option -%}
+                                    {%- if option_field[0] == "name" -%}
+                                      <label class="Bloom__Signup__Option uk-flex uk-flex-inline uk-flex-middle"><input type="checkbox" name="options[]" class="uk-margin-small-right" value="{{ option_field[1] }}" data-bloom-club-signup-options-input="" /> {{ option_field[1] }}</label><br>
+                                    {%- endif -%}
+                                  {%- endfor -%}
+                                {%- endfor -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                          {%- endfor -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- endif -%}
+          </div>
+
+        {%- if button_label == blank -%}
+          {%- if selected_level != blank -%}
+            {%- assign club_level_name = selected_level_name -%}
+          {%- else -%}
+            {%- assign club_level_name = club_name -%}
+          {%- endif -%}
+
+          {%- assign button_label = "Join " | append: club_level_name -%}
+        {%- endif -%}
+
+        <div class="uk-flex uk-flex-middle">
+          <button
+            class="{{ button_class }}"
+            data-bloom-club-signup-button="">
+            {{ button_label }}
+          </button>
+        </div>
+      </form>
+  </div>
+</div>

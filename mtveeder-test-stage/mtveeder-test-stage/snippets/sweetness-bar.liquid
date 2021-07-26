@@ -1,0 +1,24 @@
+<div class="flex flex-col h-full justify-center {% if padded %}pb-6 {% endif %}">
+    {% case sweetness %}
+    {% when 'Very sweet' %}
+        {% assign applied_sweetness_class = "w-1/12" %}
+    {% when 'Sweet' %}
+        {% assign applied_sweetness_class = "w-5/6" %}
+    {% when 'Medium-sweet' %}
+        {% assign applied_sweetness_class = "w-4/6" %}
+    {% when 'Medium-dry' %}
+        {% assign applied_sweetness_class = "w-3/6" %}
+    {% when 'Dry' %}
+        {% assign applied_sweetness_class = "w-2/6" %}
+    {% when 'Bone dry' %}
+        {% assign applied_sweetness_class = "w-1/6" %}
+    {% else %}
+    {% endcase %}
+    <div class="w-full h-2.5 mb-2 bg-secondary-tasting_bar_bg">
+        <div class="h-full {{applied_sweetness_class}} bg-secondary-tasting_bar"></div>
+    </div>
+    <div class="w-full flex justify-between">
+        <span class="font-bold" aria-label="Dry">Dry</span>
+        <span class="font-bold" aria-label="Sweet">Sweet</span>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="{{ column_width }} {% if is_swiper %}swiper-slide{% endif %} pl-4 lg:pl-6 mb-6 text-{{ alignment }}"
+  {% if end_date != blank %} data-event-end-date="{{end_date | date: "%Y-%m-%d %H:%M"}}"{% endif %}
+>
+  <div class="{% unless hide_shadow %}shadow-xl{% endunless %} h-full bg-white flex flex-col"  style="background-color: {{card_bg}};">
+    {% if enable_image %}
+      <div class="{{image_padding}}">
+        {% render 'column-image', 
+          image: image, 
+          alignment: alignment,
+          id: id,
+          max_height: 565,
+          max_image_width: max_image_width
+        %}
+      </div>
+    {% endif %}
+    <div class="pt-6 px-8 pb-6 flex-1">
+      {% if title != blank %}
+        <h3 class="text-xl font-semibold mb-2 ">{{ title | escape }}</h3>
+      {% endif %}
+      {% if text != blank %}
+        <div class="rte">{{ text }}</div>
+      {% endif %}
+
+    </div>
+
+    <div class="px-8 pb-6" style="min-height: calc(var(--button-font-size) + 3.3rem)">
+      {% if button_label != blank and button_link != blank %}
+      <a href="{{ button_link }}"
+         class="{% if secondary_button %}button-secondary{% else %}button-default{% endif %} mt-7 max-w-full"
+         {% if button_link contains 'http://' or button_link contains 'https://' %} target="_blank"{% endif %}
+      >
+      {{- button_label | escape -}}
+      </a>
+      {% endif %}
+
+      {% if use_tock_scheduler %}
+      <div class="relative tock-container {% if alignment == 'center' %}flex justify-center{% endif %}">
+        <div id="Tock_widget_container" data-tock-display-mode="Button" data-tock-color-mode="White" data-tock-locale="en-us"
+             data-tock-timezone="America/Los_Angeles" data-tock-offering="{{tock_id}}"
+             {% if alignment == 'center' %}style="width: fit-content;"{% endif %}
+        >
+        </div>
+        <div class="tock-button button-default {% if block.settings.use-secondary-button %} button-secondary {% endif%}">
+          Book now
+        </div>
+      </div>
+      {% endif %}
+    </div>
+   
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="mt-10">
+  <h3 class="border-b text-sm uppercase mb-3">{{section.settings.account_header}}</h3>
+  {% if section.settings.membership_description != blank %}
+    <div class="mb-5">
+      {{section.settings.membership_description}}
+    </div>
+  {% endif %}
+  {% if settings.development_mode %}
+    <a href="/apps/{{settings.bloom_proxy_path}}/account/customers/{{ customer.id }}" class="button-default">
+      {{section.settings.account_button_label}}
+    </a>
+  {% else %}
+    <a href="/apps/wine-club/account/customers/{{ customer.id }}" class="button-default">
+      {{section.settings.account_button_label}}
+    </a>
+  {% endif %}
+ 
+</div>
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": [
+    {
+      "type": "text",
+      "id": "account_header",
+      "label": "Membership heading",
+      "default": "Membership"
+    },
+    {
+      "type": "textarea",
+      "id": "membership_description",
+      "label": "Membership description"
+    },
+    {
+      "type": "text",
+      "id": "account_button_label",
+      "label": "Membership button label",
+      "default": "View"
+    }
+  ]
+}
+{% endschema %}

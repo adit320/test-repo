@@ -1,0 +1,5 @@
+.rte ul,
+.rte ol {
+    list-style: initial;
+    list-style-position: inside;
+}

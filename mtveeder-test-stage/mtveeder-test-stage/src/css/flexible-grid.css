@@ -1,0 +1,7 @@
+@layer base {
+    @screen lg {
+        .flexible-card:nth-child(4) {
+            margin-left: 0 !important;
+        }
+    }
+}

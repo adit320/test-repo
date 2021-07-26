@@ -1,0 +1,15 @@
+@layer base {
+    ul {
+        @apply list-disc;
+        margin: revert;
+        padding: revert;
+    }
+    ol:not(footer ol):not(#shopify-section-accordions-faqs ul):not(#shopify-section-accordions-faqs-page ul):not(.flickity-page-dots) {
+        @apply list-decimal;
+        margin: revert;
+        padding: revert;
+    }
+    li:not(footer ol):not(#shopify-section-accordions-faqs ol):not(#shopify-section-accordions-faqs-page ol) {
+        @apply pb-2;
+    }
+}

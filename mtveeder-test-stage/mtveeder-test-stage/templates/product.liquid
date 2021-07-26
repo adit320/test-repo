@@ -1,0 +1,168 @@
+{%- section 'bloom-product-form-section' -%}
+
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+{% render 'product-detail-hero-image' %}
+
+{% comment %}
+------------------
+General notes:
+    Assuming 10 rem spacing between each item on desktop
+------------------
+{% endcomment %}
+<section class="section">
+<div class="container-6xl text-center">
+    <div class="mx-auto mb-9 max-w-360p">
+        {% assign product_title = product.title %}
+        {% if settings.use_display_name %}
+            {% assign product_title = product.metafields.bloom['bloomfields'].display_name %}
+        {% endif %}
+        <h1 class="text-xl md:text-2xl font-semibold">{{ product_title }}</h1>
+        <h2 class="text-xl md:text-2xl">{{ product.price | money_without_trailing_zeros }}</h2>
+    </div>
+
+		{% include 'product-awards-simple' %}
+
+    {% if product.description %}
+      <div class=" mx-auto mb-2 {% unless settings.use_wide_product_description %}
+        max-w-lg
+      {% endunless %}">
+          {{product.description | html}}
+      </div>
+    {% endif %}
+
+    {% if settings.show_points_score and product.metafields.bloom['bloomfields'].score %}
+      <h4 class="text-lg leading-normal mb-2"><span class="text-5xl font-bold">{{product.metafields.bloom['bloomfields'].score}}</span>pts</h4>
+    {% endif %}
+
+    {% if settings.show_star_rating and product.metafields.bloom['bloomfields'].rating != blank %}
+        {% assign rating = product.metafields.bloom['bloomfields'].rating | times: 2.0 | floor %}
+        {% render 'star-rating', rating: rating, star_color: settings.star_color %}
+    {% endif %}
+</div>
+</section>
+<div class="container-6xl">
+    {% render 'product-specs', rendered_product: product, row_count: 3 %}
+</div>
+
+{% assign wide_card_gutter = 5 %}
+
+{% comment %}
+------------------
+Large image section
+------------------
+{% endcomment %}
+
+{%- if product.images[2] != blank -%}
+  {%- assign img_url = product.images[2] | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+  <div class="container-6xl py-2.5 md:py-5 object-cover text-center">
+    <img class=" lazyload w-full "  id="ProductPhotoImg"
+    data-src="{{ img_url }}"
+    data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
+    data-aspectratio="{{ product.images[2].aspect_ratio }}"
+    data-sizes="auto"
+   
+    alt="{{ featured_image.alt | escape }}">
+  </div>
+ 
+{%- endif -%}
+
+{% include 'product-awards' %}
+
+{% comment %}
+------------------
+Vineyard image and information
+------------------
+{% endcomment %}
+{% assign both_vineyard_items_present = false %}
+{% if product.metafields.bloom['bloomfields'].vineyard_notes != blank and product.metafields.bloom['bloomfields'].vineyard_image != blank %}
+    {% assign both_vineyard_items_present = true %}
+{% endif %}
+{% if product.metafields.bloom['bloomfields'].vineyard_notes != blank or product.metafields.bloom['bloomfields'].vineyard_image != blank %}
+<section class="section">
+    <div class="{% if both_vineyard_items_present %}container-6xl{% endif %}">
+    <div class="flex flex-wrap justify-center">
+        {% if product.metafields.bloom['bloomfields'].vineyard_image != blank %}
+        <div class="flex flex-1 {% if both_vineyard_items_present %}min-w-full{% else %}md:max-w-1/2{% endif %} md:min-w-1/2">
+            <div class="flex m-0 md:ml-0 w-full bg-grey m-0 md:mx-2 md:ml-0 w-full">
+                <img class="h-full w-full object-cover" src="{{product.metafields.bloom['bloomfields'].vineyard_image}}" alt="{{product.metafields.bloom['bloomfields'].vineyard_image_alt}}" />
+            </div>
+        </div>
+        {% endif %}
+        {% if product.metafields.bloom['bloomfields'].vineyard_notes != blank %}
+        <div class="flex flex-1 {% if both_vineyard_items_present %}min-w-full{% else %}md:max-w-1/2{% endif %} md:min-w-1/2" >
+            <div class="bg-general-light_background md:ml-1.5 w-full md:mr-0 p-6 sm:p-12 flex flex-col text-center items-center justify-center">
+              {{product.metafields.bloom['bloomfields'].vineyard_notes | html}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</section>
+{% endif %}
+
+{% section 'subscription-promos' %}
+{% section 'yotpo-reviews' %}
+
+{% comment %}
+------------------
+Page builder
+------------------
+{% endcomment %}
+
+{% section 'page-blocks-product' %}
+
+{% comment %}
+------------------
+Product recommendations
+------------------
+{% endcomment %}
+
+<div>
+    {% section 'product-recommendations' %}
+</div>
+
+{% section 'page-blocks-product-bottom' %}
+
+{% if settings.enable_klaviyo_product_tracking %}
+
+    {% comment %}
+    ------------------
+    Kalviyo script
+    ------------------
+    {% endcomment %}
+
+    <script type="text/javascript">
+        var _learnq = _learnq || [];
+        var item = {
+            Name: {{ product.title|json }},
+        ProductID: {{ product.id|json }},
+        Categories: {{ product.collections|map:'title'|json }},
+        ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+            URL: "{{ shop.secure_url }}{{ product.url }}",
+            Brand: {{ product.vendor|json }},
+        Price: {{ product.price|money|json }},
+        CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+        };
+        _learnq.push(['track', 'Viewed Product', item]);
+        _learnq.push(['trackViewedItem', {
+            Title: item.Name,
+            ItemId: item.ProductID,
+            Categories: item.Categories,
+            ImageUrl: item.ImageURL,
+            Url: item.URL,
+            Metadata: {
+                Brand: item.Brand,
+                Price: item.Price,
+                CompareAtPrice: item.CompareAtPrice
+            }
+        }]);
+    </script>
+    <script type="text/javascript">
+        var _learnq = _learnq || [];
+        document.getElementById("AddToCart").addEventListener('click',function (){
+            _learnq.push(['track', 'Added to Cart', item]);
+        });
+    </script>
+
+{% endif %}

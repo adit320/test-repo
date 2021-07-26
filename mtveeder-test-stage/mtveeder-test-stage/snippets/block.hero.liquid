@@ -1,0 +1,126 @@
+
+{%- if block.settings.hero_layout == 'full_width' and block.settings.hero_size == 'adapt' -%}
+  {%- if block.settings.image.aspect_ratio == blank -%}
+    {%- assign min_aspect_ratio = 2.0 -%}
+  {%- else -%}
+    {%- assign min_aspect_ratio = block.settings.image.aspect_ratio -%}
+  {%- endif -%}
+  {%- assign wrapper_height = 100 | divided_by: min_aspect_ratio -%}
+  {%- style -%}
+    .hero-{{ block.id }} {
+      height: {{- wrapper_height -}}vw !important;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+<div data-block-id="{{ block.id }}" data-block-type="hero-section">
+  {%- if block.settings.hero_layout == 'fixed_width' -%}
+    <div class="container-7xl">
+  {%- endif -%}
+  {%- if block.settings.hero_layout == 'fixed_width' and block.settings.hero_size ==  'adapt' -%}
+    {%- assign slide_width = 1090 -%}
+    {%- assign min_aspect_ratio = block.settings.image.aspect_ratio | default: 2.0 -%}
+    <div class="hero-fixed-width {% if section.settings.display_color_overlay != blank %} hero-fixed-width-overlay {% endif %} hero--adapt"
+         id="Hero-{{ block.id }}"
+         data-layout="{{ block.settings.hero_layout }}"
+         data-image-loading-animation>
+      {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+      {%- if block.settings.image.width < max_width -%}
+        {%- assign slide_width = block.settings.image.width -%}
+      {%- endif -%}
+      <div class="hero-fixed-width__content">
+        <div class="container-7xl text-center">
+          {%- if block.settings.title != blank -%}
+            <h1 class="text-white text-4xl font-medium mb-3{% if block.settings.text_size == 'large' %} text-6xl{% endif %}">{{ block.settings.title | escape }}</h2>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="text-lg{% if block.settings.text_size == 'large' %} text-xl{% endif %}">{{ block.settings.text }}</div>
+          {%- endif -%}
+          {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+            <a href="{{ block.settings.button_link }}" class="btn">
+              {{ block.settings.button_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if block.settings.image != blank -%}
+        <img class="hero-fixed-width__image lazyload lazypreload"
+             data-src="{{ img_url }}"
+             data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
+             data-aspectratio="{{ block.settings.image.aspect_ratio }}"
+             data-sizes="auto"
+             style="{%- if slide_width <= max_width -%}
+                      {%- assign min_width = slide_width | times: 100 | divided_by: max_width -%}
+                      min-width: {{ min_width }}%;
+                    {%- endif -%}
+                    object-position: {{ block.settings.alignment }};"
+             alt="{{ block.settings.image.alt | escape }}">
+      {%- else -%}
+        <span>
+          {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+          {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        </span>
+      {%- endif -%}
+      <noscript>
+        <div class="hero-fixed-width__image"{% if block.settings.image %}{% unless block.settings.image.alt == blank %} role="img" aria-label="{{ block.settings.image.alt | escape }}"{% endunless %} style="background-image: url('{{ block.settings.image | img_url: '2048x' }}'); background-position: center {{ block.settings.alignment }};"{% endif %}></div>
+      </noscript>
+    </div>
+  {%- else -%}
+    <div class="hero hero--{{ block.settings.hero_size }} hero-{{ block.id }}{% if block.settings.title != blank or block.settings.text != blank or block.settings.button_label != blank %} {% if block.settings.display_color_overlay %} hero__overlay {% endif %} {% endif %} box ratio-container lazyload js"
+         id="Hero-{{ block.id }}"
+         data-layout="{{ block.settings.hero_layout }}"
+         {%- if block.settings.image -%}
+          {% unless block.settings.image.alt == blank %}
+          role="img"
+          aria-label="{{ block.settings.image.alt | escape }}"
+          data-alt="{{ block.settings.image.alt | escape }}"
+          {% endunless %}
+         data-bg="{{ block.settings.image | img_url: '300x300' }}"
+         data-bgset="{% include 'bgset', image: block.settings.image %}"
+         data-sizes="auto"
+         data-parent-fit="cover"
+         style="background-position: {{ block.settings.alignment }};"
+         data-image-loading-animation
+         {%- endif -%}>
+    {%- if block.settings.image == blank -%}
+      <div class="placeholder-background">
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+      <div class="hero__inner">
+        <div class="container-7xl text-center">
+          {%- if block.settings.title != blank -%}
+            <h1 class="text-white text-4xl font-medium mb-3{% if block.settings.text_size == 'large' %} text-6xl{% endif %}">{{ block.settings.title | escape }}</h2>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="text-white text-lg{% if block.settings.text_size == 'large' %} text-xl{% endif %}">{{ block.settings.text }}</div>
+          {%- endif -%}
+          {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+          <!-- TODO: Style button and use a styleguide approved button -->
+            {%- capture ariaLabel -%}
+              {{- block.settings.button_label -}}
+              {%- if block.settings.button_link.type == 'frontpage_link' -%}
+                : {{ 'homepage.general.title' | t -}}
+              {%- elsif block.settings.button_link.type == 'catalog_link' -%}
+                : {{ 'collections.catalog.title' | t -}}
+              {%- elsif block.settings.button_link.object.title -%}
+                : {{ block.settings.button_link.object.title -}}
+              {%- endif -%}
+            {%- endcapture -%}
+
+            <a href="{{ block.settings.button_link }}"
+              class="btn {% comment %} hero__btn {% endcomment%} button-default"
+              aria-label="{{ ariaLabel }}">
+              {{- block.settings.button_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+    <noscript>
+      <div class="hero hero--{{ block.settings.hero_size }}{% if block.settings.title != blank or block.settings.text != blank or block.settings.button_label != blank %} {% if block.settings.display_color_overlay %} hero__overlay {% endif %}{% endif %}"{% if block.settings.image %}{% unless block.settings.image.alt == blank %} role="img" aria-label="{{ block.settings.image.alt | escape }}"{% endunless %} style="background-image: url('{{ block.settings.image | img_url: '2048x' }}'); background-position: center {{ block.settings.alignment }};"{% endif %}></div>
+    </noscript>
+  {%- endif -%}
+  {%- if block.settings.hero_layout == 'fixed_width' -%}
+    </div>
+  {%- endif -%}
+</div>

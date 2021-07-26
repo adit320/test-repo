@@ -1,0 +1,27 @@
+<!-- TODO: pagination for addresses  -->
+
+{%- if paginate.pages > 1 -%}
+  <div class="text-center mt-12 mb-10">
+    <div class="flex justify-center items-center space-x-3">
+      {%- if paginate.previous -%}
+        <a class="text-link underline" rel="prev" title="{{ 'general.pagination.previous_page' | t }}" href="{{ paginate.previous.url | remove: 'view=ajax' }}{{ hash }}">
+          {%- render 'icon', icon: 'select-arrow-left', icon_class: 'w-4 h-4' -%}
+        </a>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        {%- if part.is_link -%}
+          <a href="{{ part.url | remove: 'view=ajax' }}{{ hash }}" class="text-link" title="{{ 'general.pagination.go_to_page' | t: page: part.title }}">{{ part.title }}</a>
+        {%- else -%}
+          <span class=" {% if part.title == paginate.current_page %}is-active{% endif %}">{{ part.title }}</span>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <a class="text-link underline" rel="next" title="{{ 'general.pagination.next_page' | t }}" href="{{ paginate.next.url | remove: 'view=ajax' }}{{ hash }}">
+          {%- render 'icon', icon: 'select-arrow-right', icon_class: 'w-4 h-4' -%}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

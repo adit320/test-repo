@@ -1,0 +1,7 @@
+* p:not(:last-child) {
+  margin-bottom: 1.2rem;
+}
+
+hr {
+  border-color: var(--color-horizontal-rule);
+}

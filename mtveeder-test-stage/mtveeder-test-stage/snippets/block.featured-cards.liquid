@@ -1,0 +1,108 @@
+{%- assign image_padding = 'p-8 pb-0' -%}
+{% case block.settings.image_size %}
+  {% when "full" %}
+    {%- assign image_padding = '' -%}
+  {% when 'padded' %}
+  {%- assign image_padding = 'p-8 pb-0' -%}
+{% endcase %}
+
+{% assign has_description = false %}
+{% if block.settings.section_description != blank %}
+  {% assign has_description = true %}
+{% endif %}
+
+<div class="section"  style="background-color: {{block.settings.background_color }};">
+  <div class="container-7xl">
+    {% if block.settings.title != blank %}
+    <div class="{% if has_description %}mb-3 md:mb-7 {% else %}mb-7 md:mb-12 {%endif %} text-center">
+      <h2 class="text-2xl font-semibold">{{ block.settings.title | escape }}</h2>
+    </div>
+    {% endif %}
+
+    {% if has_description %}
+      <div class="mb-7 md:mb-12 max-w-lg mx-auto text-center">
+        <h2 class="text-body">{{ block.settings.section_description | html }}</h2>
+      </div>
+    {% endif %}
+
+
+    <div class="flex flex-wrap justify-center -ml-4 -mb4">
+      {%- assign grid_item_width = 'w-full sm:w-1/2 md:w-1/4' -%}
+      {% if block.settings.enable_column_1 %}
+        {% render 'featured-card', 
+          max_image_width: block.settings.image_width,
+          alignment: block.settings.align_text,
+          column_width: grid_item_width,
+          image_padding: image_padding,
+          card_bg: block.settings.card_bg,
+          id: "featured-card-1",
+          image: block.settings.image_1,
+          title: block.settings.title_1,
+          text: block.settings.text_1,
+          button_label: block.settings.button_label_1,
+          button_link: block.settings.button_link_1,
+          enable_image: block.settings.enable_image_1,
+          hide_shadow: block.settings.hide_shadow
+        %}
+      {% endif %}
+      {% if block.settings.enable_column_2 %}
+        {% render 'featured-card', 
+          max_image_width: block.settings.image_width,
+          alignment: block.settings.align_text,
+          column_width: grid_item_width,
+          image_padding: image_padding,
+          card_bg: block.settings.card_bg,
+          id: "featured-card-2",
+          image: block.settings.image_2,
+          title: block.settings.title_2,
+          text: block.settings.text_2,
+          button_label: block.settings.button_label_2,
+          button_link: block.settings.button_link_2,
+          enable_image: block.settings.enable_image_2,
+          hide_shadow: block.settings.hide_shadow
+      %}
+      {% endif %}
+      {% if block.settings.enable_column_3 %}
+        {% render 'featured-card', 
+          max_image_width: block.settings.image_width,
+          alignment: block.settings.align_text,
+          column_width: grid_item_width,
+          image_padding: image_padding,
+          card_bg: block.settings.card_bg,
+          id: "featured-card-3",
+          image: block.settings.image_3,
+          title: block.settings.title_3,
+          text: block.settings.text_3,
+          button_label: block.settings.button_label_3,
+          button_link: block.settings.button_link_3,
+          enable_image: block.settings.enable_image_3,
+          hide_shadow: block.settings.hide_shadow
+      %}
+      {% endif %}
+      {% if block.settings.enable_column_4 %}
+        {% render 'featured-card',
+          max_image_width: block.settings.image_width,
+          alignment: block.settings.align_text,
+          column_width: grid_item_width,
+          image_padding: image_padding,
+          card_bg: block.settings.card_bg,
+          id: "featured-card-4",
+          image: block.settings.image_4,
+          title: block.settings.title_4,
+          text: block.settings.text_4,
+          button_label: block.settings.button_label_4,
+          button_link: block.settings.button_link_4,
+          enable_image: block.settings.enable_image_4,
+          hide_shadow: block.settings.hide_shadow
+      %}
+      {% endif %}
+    </div>
+    {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+    <div class="my-6 text-center">
+      <a href="{{ block.settings.button_link }}"  class="button-default" >
+        {{- block.settings.button_label | escape -}}
+      </a>
+    </div>
+    {%- endif -%}
+  </div>
+</div>

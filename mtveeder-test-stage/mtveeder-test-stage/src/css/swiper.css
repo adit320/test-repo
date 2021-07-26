@@ -1,0 +1,15 @@
+.swiper-container-horizontal > .swiper-pagination-bullets {
+ bottom: 0px;
+}
+.swiper-container {
+  z-index: 0;
+}
+.swiper-wrapper {
+  padding-bottom: 30px;
+  padding-top: 15px;
+}
+
+.swiper-slide {
+  height: auto;
+  width: 83%;
+}

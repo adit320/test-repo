@@ -1,0 +1,93 @@
+{%- assign image_padding = 'p-8 pb-0' -%}
+{% case settings.image_size %}
+  {% when "full" %}
+    {%- assign image_padding = '' -%}
+  {% when 'padded' %}
+  {%- assign image_padding = 'p-8 pb-0' -%}
+{% endcase %}
+{% assign _card_bg = settings.card_bg %}
+{% if card_bg != 'rgba(0,0,0,0)' %}
+  {% assign _card_bg = settings.card_bg %}
+{% endif %}
+<div class="{{ column_width }} pl-4 lg:pl-6 mb-12 md:mb-16 md:mb-28 text-{{ settings.align_text }}">
+  <div class="shadow-xl h-full bg-white flex flex-col card"  style="background-color: {{_card_bg}};">
+    <div>
+      {% if enable_image %}
+      <div class="{{image_padding}} cursor-pointer" onclick="location.href = '{{product.url}}';">
+        {% render 'column-image',
+          image: product.featured_image,
+          alignment: settings.align_text,
+          id: id,
+          max_height: 565,
+          max_image_width: settings.image_width
+        %}
+      </div>
+      {% endif %}
+      <div class="pt-6 px-8 pb-0">
+        {% if product.title != blank %}
+        <div class="mb-6 cursor-pointer" onclick="location.href = '{{product.url}}';">
+          {% assign product_title = product.title %}
+          {% if settings.use_display_name %}
+            {% assign product_title = product.metafields.bloom['bloomfields'].display_name %}
+          {% endif %}
+          <h3 class="text-xl font-semibold mb-2">{{ product_title | escape }}</h3>
+          <h4>{{product.price | money_without_trailing_zeros}}</h4>
+        </div>
+        {% endif %}
+
+        {% if settings.show_pairs_well and product.metafields.bloom['bloomfields'].food_pairing != blank %}
+          <div class="rte leading-4 mb-8">{{ product.metafields.bloom['bloomfields'].food_pairing }}</div>
+        {% endif %}
+
+        {% if settings.show_sweetness_indicator and product.metafields.bloom['bloomfields'].sweetness != blank %}
+          {% render 'sweetness-bar', sweetness: product.metafields.bloom['bloomfields'].sweetness, padded: true %}
+        {% endif %}
+
+        {% if settings.show_points_score and product.metafields.bloom['bloomfields'].score != blank %}
+        <div class="text-4xl mb-4">
+          <span class="inline-block font-bold">{{product.metafields.bloom['bloomfields'].score}}</span>
+          <p class="inline-block text-body -ml-2">pts</p>
+        </div>
+        {% endif %}
+
+        {% if settings.show_star_rating and product.metafields.bloom['bloomfields'].rating != blank %}
+          {% assign _rating = product.metafields.bloom['bloomfields'].rating | times: 2.0 | floor %}
+          {% render 'star-rating', rating: _rating, star_color: settings.star_color %}
+        {% endif %}
+
+    </div>
+    </div>
+    <div class="flex-grow flex flex-col justify-end items-center">
+      {% if settings.product_button_label != blank %}
+      <div class="px-7 w-full">
+        <a href="{{ product.url }}"
+           class="button-default mb-4 w-full"
+        >
+          {{- settings.product_button_label | escape -}}
+        </a>
+      </div>
+      {% endif %}
+
+      {% if settings.atc_button_label != blank %}
+      <div class="w-full" style="padding: {{settings.atc_button_margin}}em; padding-top: 0;">
+        {% if product.available %}
+        <button class="py-3 button-add-to-cart" onclick="addAndOpenCart({{product.variants[0].id}}, 1)"
+          style='min-width: {{settings.atc_button_minimum_width}}%;'
+        >
+          {{settings.atc_button_label}}
+        </button>
+        {% else %}
+        <button class="button-sold-out" disabled
+          style='min-width: {{settings.atc_button_minimum_width}}%;
+            min-width: {{settings.atc_button_minimum_width}}%;
+            font-weight: {{settings.atc_button_font.weight}};
+          '
+        >
+          {{settings.sold_out_button_label}}
+        </button>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,201 @@
+  {% capture image_layout %}
+    <div class="w-full md:w-6/12 flex">
+      {% if section.settings.image != blank %}
+      {% comment %}
+        Reuse this code if we ever need auto aspect-ratio behavior
+        {% capture img_id %}FeatureImage-{{ section.id }}{% endcapture %}
+      {% endcomment %}
+        {% capture wrapper_id %}FeatureImageWrapper-{{ section.id }}{% endcapture %}
+        {%- assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        <div class="flex m-0 md:ml-0 w-full" id="{{ wrapper_id }}">
+          <img id="{{ img_id }}"
+               class="h-full object-cover feature-row__image lazyload w-full mx-0"
+               data-src="{{ img_url }}"
+               data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+               data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+               data-sizes="auto"
+               alt="{{ section.settings.image.alt | escape }}">
+        </div>
+
+        <noscript>
+          {{ section.settings.image | img_url: '600x600', scale: 2 | img_tag: section.settings.image.alt, 'feature-row__image' }}
+        </noscript>
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+
+  {% capture text_section %}
+    {% assign text_alignment = "md:text-center" %}
+    {% case section.settings.text_alignment %}
+      {% when 'top_left' %}
+        {% assign text_alignment = '' %}
+      {% when 'top_center' %}
+        {% assign text_alignment = 'md:items-center md:text-center' %}
+      {% when 'top_right' %}
+        {% assign text_alignment = 'md:items-end md:text-right' %}
+      {% when 'center_left' %}
+       {% assign text_alignment = 'md:justify-center md:text-left' %}
+      {% when 'center_center' %}
+       {% assign text_alignment = 'md:justify-center md:items-center md:text-center' %}
+      {% when 'center_right' %}
+       {% assign text_alignment = 'md:justify-center md:items-end md:text-right' %}
+      {% when 'bottom_left' %}
+        {% assign text_alignment = 'md:justify-end' %}
+      {% when 'bottom_center' %}
+        {% assign text_alignment = 'md:justify-end md:items-center md:text-center' %}
+      {% when 'bottom_right' %}
+        {% assign text_alignment = 'md:justify-end md:items-end md:text-right' %}
+    {% endcase %}
+  
+    <div class="{{ section.settings.layout }} text-{{section.settings.mobile_text_alignment}} p-12 flex flex-col w-full md:w-6/12 {{text_alignment}}">
+      {% if section.settings.title != blank %}
+      <div>
+        <h2 class="text-xl font-semibold mb-2">{{ section.settings.title | escape }}</h2>
+      </div>
+      {% endif %}
+      {% if section.settings.text != blank %}
+        <div class="rte">{{ section.settings.text }}</div>
+      {% endif %}
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+
+      <a href="{{ section.settings.button_link }}"
+         class="btn button-default mt-4">
+        {{- section.settings.button_label | escape -}}
+      </a>
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="flex flex-wrap {% if section.settings.layout == "right" %}flex-col-reverse md:flex-row{% endif %}">
+    {% if section.settings.layout == "left" %}
+      {{ image_layout }}
+      {{ text_section }}
+    {% else %}
+      {{ text_section }}
+      {{ image_layout }}
+    {% endif %}
+  </div>
+
+
+
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_alignment",
+      "label": "Mobile text alignment",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+        "value": "center",
+        "label": "Center"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Desktop text alignment",
+      "default": "center_center",
+      "options": [
+        {
+          "value": "top_left",
+          "label": "Top Left"
+        },
+        {
+        "value": "top_center",
+        "label": "Top Center"
+        },
+        {
+          "value": "top_right",
+          "label": "Top Right"
+        },
+        {
+          "value": "center_left",
+          "label": "Center Left"
+        },
+        {
+        "value": "center_center",
+        "label": "Center Center"
+        },
+        {
+          "value": "center_right",
+          "label": "Center Right"
+        },
+        {
+          "value": "bottom_left",
+          "label": "Bottom Left"
+        },
+        {
+        "value": "bottom_center",
+        "label": "Bottom Center"
+        },
+        {
+          "value": "bottom_right",
+          "label": "Bottom Right"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Image with text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Add details about your product or text that support the related image.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
+

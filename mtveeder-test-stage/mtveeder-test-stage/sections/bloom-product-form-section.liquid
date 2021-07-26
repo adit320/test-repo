@@ -1,0 +1,68 @@
+{% comment %}
+This shop uses Bloom, a growth platform for modern wineries.
+You SHOULD NOT modify the contents of this file.
+It is automatically generated and your changes will be overwritten.
+These features and content can be managed within the Bloom app or the Shopify customizer.
+
+Bloom (www.bloom.wine)
+{% endcomment %}
+
+<div
+  data-bloom-product-form-config='{{ section.settings | json }}'
+  data-bloom-product="{{ product | json | escape }}"
+>
+</div>
+
+<style>
+{{ section.settings.base_font | font_face }}
+{{ section.settings.cta_button_font | font_face }}
+
+:root {
+  --bloom-product-form-base-font-family: {{ section.settings.base_font.family }}, {{ section.settings.base_font.fallback_families }};
+  --bloom-product-form-base-font-weight: {{ section.settings.base_font.weight }};
+  --bloom-product-form-base-font-style: {{ section.settings.base_font.style }};
+  --bloom-product-form-base-font-size: {{ section.settings.base_font_size }}px;
+
+  --bloom-product-form-option-picker-border-color: {{ section.settings.option_picker_border_color }};
+  --bloom-product-form-option-picker-button-background-color: {{ section.settings.option_picker_button_background_color }};
+  --bloom-product-form-option-picker-button-text-color: {{ section.settings.option_picker_button_text_color }};
+  --bloom-product-form-option-picker-background-color: {{ section.settings.option_picker_background_color }};
+  --bloom-product-form-option-picker-input-text-color: {{ section.settings.option_picker_input_text_color }};
+  --bloom-product-form-option-picker-border-radius: {{ section.settings.option_picker_border_radius }}px;
+  --bloom-product-form-option-picker-font-size: {{ section.settings.option_picker_font_size }}px;
+  --bloom-product-form-option-picker-padding-vertical: {{ section.settings.option_picker_padding }}em;
+  --bloom-product-form-option-picker-padding-horizontal: {{ section.settings.option_picker_padding | times: 2 }}em;
+
+  --bloom-product-form-background-color: {{ section.settings.background_color }};
+  --bloom-product-form-text-color: {{ section.settings.text_color }};
+  --bloom-product-form-minimum-height: {{ section.settings.minimum_height }}px;
+
+  --bloom-product-cta-button-minimum-width: {{ section.settings.cta_button_minimum_width }}px;
+  --bloom-product-cta-button-margin: {{ section.settings.cta_button_margin }}em;
+  --bloom-product-form-cta-button-border-color: {{ section.settings.cta_button_border_color }};
+  --bloom-product-form-cta-button-background-color: {{ section.settings.cta_button_background_color }};
+  --bloom-product-form-cta-button-text-color: {{ section.settings.cta_button_text_color }};
+  --bloom-product-form-cta-button-border-radius: {{ section.settings.cta_button_border_radius }}px;
+  --bloom-product-form-cta-button-font-family: {{ section.settings.cta_button_font.family }}, {{ section.settings.cta_button_font.fallback_families }};
+  --bloom-product-form-cta-button-font-weight: {{ section.settings.cta_button_font.weight }};
+  --bloom-product-form-cta-button-font-style: {{ section.settings.cta_button_font.style }};
+  --bloom-product-form-cta-button-font-size: {{ section.settings.cta_button_font_size }}px;
+}
+</style>
+
+<script>
+  function initializeBloomProductForm() {
+    var config = Bloom.storefront.utilities._.keysToCamel(
+      JSON.parse(document.querySelector("[data-bloom-product-form-config]").dataset["bloomProductFormConfig"])
+    );
+    Object.assign(config, Bloom.storefront.utilities._.keysToCamel(null));
+    Object.assign(config, Bloom.storefront.settings.cart)
+    bloom.storage().setItem('productForm', config)
+  }
+  document.addEventListener('shopify:section:load', initializeBloomProductForm);
+  initializeBloomProductForm()
+</script>
+
+{% schema %}
+{"name":"Bloom Product Form","settings":[{"type":"header","content":"General settings"},{"type":"select","id":"form_type","label":"Product form type","options":[{"value":"ledge","label":"Ledge"}],"default":"ledge"},{"type":"color","id":"background_color","label":"Background color","default":"#EEEEEE"},{"type":"color","id":"text_color","label":"Text color","default":"#000000"},{"type":"font_picker","id":"base_font","label":"Base font","default":"helvetica_n4"},{"type":"range","id":"base_font_size","label":"Base font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"range","id":"minimum_height","label":"Minimum height","min":10,"max":150,"step":10,"unit":"px","default":100},{"type":"header","content":"Variant picker styles"},{"type":"text","id":"quantity_picker_prompt_label","label":"Quantity prompt label","default":"How many?"},{"type":"color","id":"option_picker_border_color","label":"Border color","default":"#000000"},{"type":"color","id":"option_picker_button_background_color","label":"Button background color","default":"#000000"},{"type":"color","id":"option_picker_button_text_color","label":"Button text color","default":"#FFFFFF"},{"type":"color","id":"option_picker_background_color","label":"Background color","default":"#FFFFFF"},{"type":"color","id":"option_picker_input_text_color","label":"Text color","default":"#000000"},{"type":"range","id":"option_picker_border_radius","label":"Border radius","min":0,"max":40,"step":1,"unit":"px","default":0},{"type":"range","id":"option_picker_font_size","label":"Font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"range","id":"option_picker_padding","label":"Padding","min":0,"max":1,"step":0.1,"unit":"em","default":0.5},{"type":"header","content":"Add to cart"},{"type":"range","id":"cta_button_minimum_width","label":"Minimum width","min":20,"max":400,"step":20,"unit":"px","default":200},{"type":"text","id":"cta_label","label":"Button label","default":"Add to cart"},{"type":"text","id":"cta_unavailable_label","label":"Unavilable button label","default":"Unavailable"},{"type":"color","id":"cta_button_border_color","label":"Button border color","default":"#000000"},{"type":"color","id":"cta_button_background_color","label":"Button background color","default":"#000000"},{"type":"color","id":"cta_button_text_color","label":"Button text color","default":"#FFFFFF"},{"type":"range","id":"cta_button_margin","label":"Margin","min":0,"max":2,"step":0.1,"unit":"em","default":0},{"type":"range","id":"cta_button_border_radius","label":"Button border radius","min":0,"max":40,"step":1,"unit":"px","default":0},{"type":"font_picker","id":"cta_button_font","label":"Button font","default":"helvetica_n4"},{"type":"range","id":"cta_button_font_size","label":"Button font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"header","content":"🍷"},{"type":"paragraph","content":"Made by Bloom"}]}
+{% endschema %}

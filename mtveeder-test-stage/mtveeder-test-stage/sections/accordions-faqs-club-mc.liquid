@@ -1,0 +1,99 @@
+{% comment %}
+  This is a generated file. Please edit and copy the original file (sections/accordions-faqs.liquid) to maintain consistency 
+  between different page versions of this section
+{% endcomment %}
+<section style="background-color: {{section.settings.section_bg}}">
+    <div class="container-3xl pb-7">
+    {% for block in section.blocks %}
+        {% case block.type %}
+            {% when 'header' %}
+                <h1 class="text-xl mx-auto pt-10 pb-4 text-center">{{block.settings.header}}</h1>
+            {% when 'accordion' %}
+                <div class="bg-white mx-auto my-4" x-data="{selected:null}" style="background-color: {{section.settings.faq_bg}}">
+                    <ul class="shadow-box list-none m-0 p-0 list-style-none">
+                        <li class="relative {% if section.settings.show_shadow %}shadow-xl{% endif %}">
+                            <button type="button" class="w-full px-6 py-4 text-left" @click="selected !== 1 ? selected = 1 : selected = null">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg normal-case">
+                                        {{block.settings.title}}
+                                    </span>
+                                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" x-bind:style="selected == 1 ? 'display: none' : 'display: block'">
+                                        <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+                                    </svg>
+                                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" x-bind:style="selected == 1 ? 'display: block' : 'display: none'">
+                                        <path fillRule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+
+                            <div class="text-mobile-body relative overflow-hidden transition-all max-h-0 duration-700" style="" x-ref="container1" x-bind:style="selected == 1 ? 'max-height: ' + $refs.container1.scrollHeight + 'px' : ''">
+                                <div class="p-6 pt-0 max-w-full md:max-width-half">
+                                    {{block.settings.content}}
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+        {% endcase %}
+    {% endfor %}
+</div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQs",
+  "settings": [
+    {
+        "type": "checkbox",
+        "id": "show_shadow",
+        "label": "Show drop shadow on accordions",
+        "default": true
+    },
+    {
+        "type": "color",
+        "id": "section_bg",
+        "label": "Section background",
+        "default": "rgba(0,0,0,0)"
+    },
+    {
+        "type": "color",
+        "id": "faq_bg",
+        "label": "FAQ background",
+        "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+        "type": "header",
+        "name": "Header",
+        "settings": [
+            {
+                "type": "text",
+                "id": "header",
+                "label": "Title",
+                "default": "Add a title or tagline"
+            }
+        ]
+    },
+    {
+      "type": "accordion",
+      "name": "Question & answer",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Question",
+          "default": "Add a title or tagline"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Answer",
+          "default": "<p>Share blog posts, products, or promotions with your customers. Use this text to describe products, share details on availability and style, or as a space to display recent reviews or FAQs.</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

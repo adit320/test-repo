@@ -1,0 +1,85 @@
+<div class="section lazyload"  
+  {%- if section.settings.image -%}
+    {% unless section.settings.image.alt == blank %}
+      role="img"
+      aria-label="{{ section.settings.image.alt | escape }}"
+      data-alt="{{ section.settings.image.alt | escape }}"
+    {% endunless %}
+    data-bg="{{ section.settings.image | img_url: '300x300' }}"
+    data-bgset="{% include 'bgset', image: section.settings.image %}"
+    data-sizes="auto"
+    data-parent-fit="cover"
+    style="background-position: {{ section.settings.alignment }}; background-size: cover; background-repeat: norepeat;"
+    data-image-loading-animation
+  {% elsif section.settings.background_color %}
+    style="background-color: {{section.settings.background_color }};"
+  {%- endif -%}>
+  
+  <div class="container-6xl">
+    {% if section.settings.heading != blank %}
+      <div class="mb-7 md:mb-12 text-center">
+        {% if section.settings.heading != blank %}
+          <h2 class="text-2xl font-semibold">{{ section.settings.heading | escape }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+    {% if section.settings.custom_html != blank %}
+      <div class="mx-auto">
+        {{ section.settings.custom_html }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Custom HTML",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Image alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "html",
+      "id": "custom_html",
+      "label": "HTML content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Html",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}

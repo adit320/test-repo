@@ -1,0 +1,15 @@
+.table th {
+  padding: 0px 10px 0.75rem 10px;
+  border-bottom: 1px solid var(--color-horizontal-rule);
+  text-align: left;
+  text-transform: uppercase;
+  font-family: var(--font-heading), system-ui, serif;
+  color: var(--heading-font-color);
+  font-weight: 500;
+
+}
+.table td {
+  padding: 18px 10px;
+  border-bottom: 1px solid var(--color-horizontal-rule);
+  text-align: left;
+}

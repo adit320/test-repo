@@ -1,0 +1,94 @@
+{% comment %}
+This shop uses Bloom, a growth platform for modern wineries.
+You SHOULD NOT modify the contents of this file.
+It is automatically generated and your changes will be overwritten.
+These features and content can be managed within the Bloom app or the Shopify customizer.
+
+Bloom (www.bloom.wine)
+{% endcomment %}
+
+{% assign should_redirect_to_cart_panel = false %}
+{% if section.settings.enabled and request.page_type contains "cart" %}
+  {% assign should_redirect_to_cart_panel = true %}
+{% endif %}
+
+<div data-bloom-cart-config='{{ section.settings | json }}'></div>
+
+<style>
+{% if should_redirect_to_cart_panel %}
+  body > * {
+    display: none;
+  }
+{% endif %}
+
+{{ section.settings.base_font | font_face }}
+{{ section.settings.header_font | font_face }}
+{{ section.settings.line_item_title_font | font_face }}
+{{ section.settings.line_item_description_font | font_face }}
+{{ section.settings.legal_message_font | font_face }}
+
+:root {
+  --bloom-cart-panel-base-font-family: {{ section.settings.base_font.family }}, {{ section.settings.base_font.fallback_families }};
+  --bloom-cart-panel-base-font-weight: {{ section.settings.base_font.weight }};
+  --bloom-cart-panel-base-font-style: {{ section.settings.base_font.style }};
+  --bloom-cart-panel-base-font-size: {{ section.settings.base_font_size }}px;
+
+  --bloom-cart-panel-header-font-family: {{ section.settings.header_font.family }}, {{ section.settings.header_font.fallback_families }};
+  --bloom-cart-panel-header-font-weight: {{ section.settings.header_font.weight }};
+  --bloom-cart-panel-header-font-style: {{ section.settings.header_font.style }};
+  --bloom-cart-panel-header-font-size: {{ section.settings.header_font_size }}px;
+
+  --bloom-cart-panel-line-item-title-font-family: {{ section.settings.line_item_title_font.family }}, {{ section.settings.line_item_title_font.fallback_families }};
+  --bloom-cart-panel-line-item-title-font-weight: {{ section.settings.line_item_title_font.weight }};
+  --bloom-cart-panel-line-item-title-font-style: {{ section.settings.line_item_title_font.style }};
+  --bloom-cart-panel-line-item-title-font-size: {{ section.settings.line_item_title_font_size }}px;
+  --bloom-cart-panel-line-item-description-font-family: {{ section.settings.line_item_description_font.family }}, {{ section.settings.line_item_description_font.fallback_families }};
+  --bloom-cart-panel-line-item-description-font-weight: {{ section.settings.line_item_description_font.weight }};
+  --bloom-cart-panel-line-item-description-font-style: {{ section.settings.line_item_description_font.style }};
+  --bloom-cart-panel-line-item-description-font-size: {{ section.settings.line_item_description_font_size }}px;
+
+  --bloom-cart-panel-quantity-picker-border-color: {{ section.settings.quantity_picker_border_color }};
+  --bloom-cart-panel-quantity-picker-button-background-color: {{ section.settings.quantity_picker_button_background_color }};
+  --bloom-cart-panel-quantity-picker-button-text-color: {{ section.settings.quantity_picker_button_text_color }};
+  --bloom-cart-panel-quantity-picker-input-background-color: {{ section.settings.quantity_picker_input_background_color }};
+  --bloom-cart-panel-quantity-picker-input-text-color: {{ section.settings.quantity_picker_input_text_color }};
+  --bloom-cart-panel-quantity-picker-border-radius: {{ section.settings.quantity_picker_border_radius }}px;
+  --bloom-cart-panel-quantity-picker-font-size: {{ section.settings.quantity_picker_font_size }}px;
+  --bloom-cart-panel-quantity-picker-padding-vertical: {{ section.settings.quantity_picker_padding }}em;
+  --bloom-cart-panel-quantity-picker-padding-horizontal: {{ section.settings.quantity_picker_padding | times: 1.5 }}em;
+  --bloom-product-form-option-picker-border-radius: {{section.settings.button_border_radius}}px;
+  --bloom-product-form-option-picker-border-input-radius: {{section.settings.quantity_picker_input_border_radius}}px;
+
+  --bloom-cart-panel-legal-message-font-family: {{ section.settings.legal_message_font.family }}, {{ section.settings.legal_message_font.fallback_families }};
+  --bloom-cart-panel-legal-message-font-weight: {{ section.settings.legal_message_font.weight }};
+  --bloom-cart-panel-legal-message-font-style: {{ section.settings.legal_message_font.style }};
+  --bloom-cart-panel-legal-message-font-size: {{ section.settings.legal_message_font_size }}px;
+  --bloom-cart-panel-footer-background-color: {{ section.settings.footer_background_color }};
+
+  --bloom-cart-panel-error-background-color: {{ section.settings.error_background_color }};
+  --bloom-cart-panel-error-text-color: {{ section.settings.error_text_color }};
+}
+</style>
+
+<script>
+  function initializeBloomCartSection() {
+    var config = Bloom.storefront.utilities._.keysToCamel(
+      JSON.parse(document.querySelector("[data-bloom-cart-config]").dataset["bloomCartConfig"])
+    )
+    Object.assign(
+      config,
+      Bloom.storefront.settings.cart
+    )
+    bloom.storage().setItem('cartPanel', Object.assign({}, config, {dobSettings: Bloom.storefront.settings.dob}))
+  }
+  document.addEventListener('shopify:section:load', initializeBloomCartSection)
+  initializeBloomCartSection()
+
+  {% if should_redirect_to_cart_panel %}
+    window.location.assign("/#cart")
+  {% endif %}
+</script>
+
+{% schema %}
+{"name":"Bloom Cart","settings":[{"type":"header","content":"General settings"},{"type":"checkbox","id":"enabled","label":"Enable cart panel","default":false},{"type":"checkbox","id":"show_shipping_fees","label":"Show shipping fees","default":false},{"type":"font_picker","id":"base_font","label":"Base font","default":"helvetica_n4"},{"type":"range","id":"base_font_size","label":"Base font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"range","id":"button_border_radius","label":"Button border radius","min":0,"max":32,"step":1,"unit":"px","default":0},{"type":"url","id":"continue_shopping_url","label":"Continue shopping URL"},{"type":"header","content":"Header"},{"type":"text","id":"header_text","label":"Header text","default":"Your cart"},{"type":"font_picker","id":"header_font","label":"Header font","default":"helvetica_n4"},{"type":"range","id":"header_font_size","label":"Header font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"header","content":"Line items"},{"type":"font_picker","id":"line_item_title_font","label":"Line item title font","default":"helvetica_n4"},{"type":"range","id":"line_item_title_font_size","label":"Line item title font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"font_picker","id":"line_item_description_font","label":"Line item description font","default":"helvetica_n4"},{"type":"range","id":"line_item_description_font_size","label":"Line item description font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"paragraph","content":"Quantity picker styles"},{"type":"color","id":"quantity_picker_border_color","label":"Border color","default":"#000000"},{"type":"color","id":"quantity_picker_button_background_color","label":"Button background color","default":"#000000"},{"type":"color","id":"quantity_picker_button_text_color","label":"Button text color","default":"#FFFFFF"},{"type":"color","id":"quantity_picker_input_background_color","label":"Input background color","default":"#FFFFFF"},{"type":"color","id":"quantity_picker_input_text_color","label":"Input text color","default":"#000000"},{"type":"range","id":"quantity_picker_border_radius","label":"Border radius","min":0,"max":40,"step":1,"unit":"px","default":0},{"type":"range","id":"quantity_picker_font_size","label":"Font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"range","id":"quantity_picker_padding","label":"Padding","min":0,"max":1,"step":0.1,"unit":"em","default":0.5},{"type":"range","id":"quantity_picker_input_border_radius","label":"Input border radius","min":0,"max":32,"step":1,"unit":"px","default":0},{"type":"header","content":"Footer"},{"type":"richtext","id":"footer_message","label":"Footer message","info":"Add a message that assists your customers with their purchase experience."},{"type":"richtext","id":"legal_message","label":"Legal message","info":"Add links to your shipping or refund terms, or other legal requirements."},{"type":"font_picker","id":"legal_message_font","label":"Legal message font","default":"helvetica_n4"},{"type":"range","id":"legal_message_font_size","label":"Legal message font size","min":8,"max":32,"step":1,"unit":"px","default":16},{"type":"color","id":"footer_background_color","label":"Background color","default":"#CCCCCC"},{"type":"header","content":"Errors"},{"type":"color","id":"error_background_color","label":"Background color","default":"#f8cfd7"},{"type":"color","id":"error_text_color","label":"Text color","default":"#7a0d22"},{"type":"text","id":"dob_error_message","label":"DOB error message"},{"type":"header","content":"🍷"},{"type":"paragraph","content":"Made by Bloom"}]}
+{% endschema %}

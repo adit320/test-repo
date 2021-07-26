@@ -1,0 +1,426 @@
+{%- capture header_logo -%}
+  <a href="{{ routes.root_url }}">
+    {%- if section.settings.logo != blank -%}
+      {%- capture image_size -%}{{ section.settings.logo_max_width }}x{%- endcapture -%}
+      <img class=""
+        src="{{ section.settings.logo | img_url: "600x" }}"
+        width="{{ image_size }}"
+        alt="{{ section.settings.logo.alt | default: shop.name | escape }}">
+    {%- else -%}
+      <span class="text-2xl font-semibold text-heading-color">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+{%- endcapture -%}
+{%- assign main_menu_handle = section.settings.navigation_menu | default: 'main-menu' -%}
+{%- assign main_menu = linklists[main_menu_handle] -%}
+{% assign login = 'customer.login.title' | t %}
+{% assign register = 'customer.login.register_link' | t %}
+{% assign logout = 'customer.account.logout' | t %}
+<nav class="sticky" style="background-color: {{section.settings.navbar_bg}};">
+  {% render 'search', background_color: section.settings.navbar_bg %}
+  <div class="mx-auto pl-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="p-2">
+          {{header_logo}}
+        </div>
+      </div>
+      <div class="flex items-center">
+        <div class="ml-4 hidden lg:flex items-center md:ml-6 flex-wrap">
+          {% for link in main_menu.links %}
+            {% assign child_list_handle = link.title | handleize %}
+            {% if linklists[child_list_handle].links != empty %}
+              <!-- Check if menu has grandchildren -->
+              {% assign has_grandchildren = false %}
+              {% for childlink in linklists[child_list_handle].links %}
+                {% assign grandchild_list_handle = childlink.title | handleize %}
+                {% if linklists[grandchild_list_handle].links != empty %}
+                  {% assign has_grandchildren = true %}
+                {% endif %}
+              {% endfor %}
+              <div @mouseover.away.debounce.075ms="open = false; clicked = false;" class="{% unless has_grandchildren %}relative {% endunless %}{% if forloop.index > 3 %} lg:hidden xl:block {% endif %}" 
+                x-data="{ open: false, clicked: false }">
+                <a href={{link.url}} @click="if(window.isTouchDevice() && !clicked) { $event.preventDefault(); clicked = true;}" @mouseover="open = true" class="navbar-button flex flex-row items-center">
+                    <span>{{ link.title }}</span>
+                    {% if section.settings.show_dropdown_arrows %}
+                      <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}" class="inline w-4 h-4 ml-1 transition-transform duration-200 transform rotate-180"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>                      
+                    {% endif %}
+                </a>
+               
+                
+                {% if has_grandchildren %}
+                  <!-- If it has grandchildren -->
+                  <div x-show="open" 
+                  x-transition:enter="transition ease-out duration-100" 
+                  x-transition:enter-start="transform opacity-0 scale-95" 
+                  x-transition:enter-end="transform opacity-100 scale-100" 
+                  x-transition:leave="transition ease-in duration-75" 
+                  x-transition:leave-start="transform opacity-100 scale-100" 
+                  x-transition:leave-end="transform opacity-0 scale-95" 
+                  style="display: none;"
+                  class="absolute top-full left-0 md:w-screen origin-top-right z-30">
+                    <div class="px-4 py-4 navbar-dropdown shadow-xl ">
+                      <div class="flex justify-center space-x-20">
+                        {% for childlink in linklists[child_list_handle].links %}
+                          <div>
+                            <a href="{{ childlink.url }}" class="navbar-dropdown-title mb-2 font-bold block">{{ childlink.title | escape }}</a>
+                            {% assign grandchild_list_handle = childlink.title | handleize %}
+                            <div class="space-y-2">
+                              {% for grandchildlink in linklists[grandchild_list_handle].links %}
+                                <a href="{{ grandchildlink.url }}" class="navbar-dropdown-link text-sm block">{{ grandchildlink.title | escape }}</a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <div x-show="open" 
+                  x-transition:enter="transition ease-out duration-100" 
+                  x-transition:enter-start="transform opacity-0 scale-95" 
+                  x-transition:enter-end="transform opacity-100 scale-100" 
+                  x-transition:leave="transition ease-in duration-75" 
+                  x-transition:leave-start="transform opacity-100 scale-100" 
+                  x-transition:leave-end="transform opacity-0 scale-95" 
+                  style="display: none;"
+                  class="absolute left-0 origin-top-right rounded-md shadow-lg md:w-48 z-30">
+                    <div class="px-4 py-4 navbar-dropdown shadow-xl ">
+                      <div class="space-y-2">
+                        {% for childlink in linklists[child_list_handle].links %}
+                          <a href="{{ childlink.url }}" class="navbar-dropdown-link text-sm block">{{ childlink.title | escape }}</a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            {% else %}
+              <a class="navbar-button {% if forloop.index > 3 %} lg:hidden xl:block {% endif %} {% if link.active%} font-semibold {% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+              <a href="/account" id="account" class="navbar-button lg:hidden xl:block">{{'customer.account.title' | t}}</a>
+              {{ logout  | customer_logout_link | replace: '<a', '<a class="navbar-button lg:hidden xl:block"' }}
+            {% else %}
+              {{ login | customer_login_link | replace: '<a', '<a id="login" class="navbar-button lg:hidden xl:block"' }}
+              {% if section.settings.show_register %}
+              {{ register | customer_register_link | replace: '<a', '<a id="register" class="navbar-button lg:hidden xl:block"' }}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="ml-4 mr-2 md:mr-4 flex items-center lg:ml-6">
+          <button  @click="toggleSearch();" class="navbar-icon-button">
+            <span  class="sr-only">Search</span>
+            {%- render 'icon', icon: 'search',  icon_class: 'h-6 w-6' -%}
+          </button>
+          <a href="/cart" id="cartToggle" class="relative navbar-blockbutton p-5">
+            <span class="sr-only">View notifications</span>
+            {%- render 'icon', icon: 'cart', icon_class: 'h-6 w-6' -%}
+            <div id="cart-counter" class="cart-count {% if cart.item_count == 0 %}hidden{% else %}flex{% endif %}" style="background-color: {{section.settings.cart_count_color}};" data-cart-count-bubble="">
+              {{cart.item_count }}
+            </div>
+          </a>
+          <div class="ml-0.5 flex xl:hidden">
+            <!-- Mobile menu button -->
+            <button class="p-5 rounded-lg focus:outline-none focus:shadow-outline" @click="toggleMobile()">
+                <span class="sr-only">Open main menu</span>
+                <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                    <path x-show="!isMobileOpen()" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd" style="display: none;"></path>
+                    <path style="display: none;" x-show="isMobileOpen()" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- assign sidebar_menu_handle = section.settings.sidebar_menu | default: 'sidebar-menu' -%}
+  {%- assign sidebar_menu = linklists[sidebar_menu_handle] -%}
+
+  <div class="relative" >
+    <div id="mobile-menu" 
+      x-show="isMobileOpen()"
+      @click.away="closeMobile()"
+      x-transition:enter="transition ease-out duration-100"
+      x-transition:enter-start="transform opacity-0 scale-95"
+      x-transition:enter-end="transform opacity-100 scale-100" 
+      x-transition:leave="transition ease-in duration-75" 
+      x-transition:leave-start="transform opacity-100 scale-100" 
+      x-transition:leave-end="transform opacity-0 scale-95"
+      style="max-height: 75vh; display: none;"
+      class="overflow-auto absolute shadow-xl text-center right-0 w-full xl:hidden origin-top-right z-30 md:rounded-md md:right-3 md:-top-3 md:max-w-md ml-auto">
+      <div class="px-2 pt-16 pb-16 space-y-2 sm:px-3">
+        {% for link in sidebar_menu.links %}
+            {% assign child_list_handle = link.title | handleize %}
+            {% if linklists[child_list_handle].links != empty %}
+              <div @click.away="open = false" class="relative" x-data="{ open: false }">
+                <button @click="open = !open" class="mx-auto w-full sidebar-button flex flex-row items-center justify-center">
+                    <span>{{ link.title }}</span>
+                    {% if section.settings.show_dropdown_arrows %}
+                      <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}" class="inline w-4 h-4 ml-1 transition-transform duration-200 transform rotate-180"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>                      
+                    {% endif %}
+                </button>
+                <!-- Check if menu has grandchildren -->
+                {% assign has_grandchildren = false %}
+                {% for childlink in linklists[child_list_handle].links %}
+                  {% assign grandchild_list_handle = childlink.title | handleize %}
+                  {% if linklists[grandchild_list_handle].links != empty %}
+                    {% assign has_grandchildren = true %}
+                  {% endif %}
+                {% endfor %}
+                
+                {% if has_grandchildren %}
+                  <!-- If it has grandchildren -->
+                  <div class="relative overflow-hidden transition-all max-h-0 duration-700"
+                    x-ref="container{{forloop.index}}"
+                    x-bind:style="open ? 'max-height: ' + $refs.container{{forloop.index}}.scrollHeight + 'px' : ''">
+                    <div class="px-4 py-4  ">
+                      <div class="grid grid-cols-1 gap-6">
+                        {% for childlink in linklists[child_list_handle].links %}
+                          <div>
+                            <a href="{{ childlink.url }}" class="navbar-dropdown-title mb-2 font-bold block">{{ childlink.title | escape }}</a>
+                            {% assign grandchild_list_handle = childlink.title | handleize %}
+                            <div class="space-y-2">
+                              {% for grandchildlink in linklists[grandchild_list_handle].links %}
+                                <a href="{{ grandchildlink.url }}" class="navbar-dropdown-link text-sm block">{{ grandchildlink.title | escape }}</a>
+                              {% endfor %}
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="relative overflow-hidden transition-all max-h-0 duration-500" 
+                    x-ref="container{{forloop.index}}" 
+                    x-bind:style="open ? 'max-height: ' + $refs.container{{forloop.index}}.scrollHeight + 'px' : ''">
+                    <div class="px-2 py-2 ">
+                      <div class="space-y-2">
+                        {% for childlink in linklists[child_list_handle].links %}
+                          <a href="{{ childlink.url }}" class="navbar-dropdown-link text-sm block">{{ childlink.title | escape }}</a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            {% else %}
+              <a class="sidebar-button" href="{{ link.url }}">{{ link.title }}</a>
+            {% endif %}
+          {% endfor %}
+  
+      </div>
+      <hr />
+      <div class="pt-4 pb-16">
+        <div class="mt-3 px-2 space-y-1">
+          {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+              <a href="/account" class="sidebar-button">{{'customer.account.title' | t}}</a>
+              {{ logout  | customer_logout_link | replace: '<a', '<a class="sidebar-button"' }}
+            {% else %}
+              {{ login | customer_login_link | replace: '<a', '<a class="sidebar-button"' }}
+              {% if section.settings.show_register %}
+                {{ register | customer_register_link | replace: '<a', '<a class="sidebar-button"' }}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+  
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<style>
+  .navbar-button {
+    color: {{section.settings.navbar_button}};
+  }
+
+  .navbar-button:hover {
+    color: {{section.settings.navbar_button_hover}};
+  }
+
+  .navbar-blockbutton, .navbar-icon-button {
+    color: {{section.settings.navbar_block_button}};
+    background-color: {{section.settings.navbar_block_button_bg}};
+  }
+
+  .navbar-blockbutton:hover, .navbar-icon-button:hover {
+    color: {{section.settings.navbar_block_button_hover}};
+    background-color: {{section.settings.navbar_block_button_bghover}};
+  }
+
+  .navbar-dropdown {
+    background-color: {{section.settings.navbar_dropdown_color}};
+  }
+
+  .navbar-dropdown-title, .navbar-dropdown-link {
+    color: {{section.settings.navbar_button}};
+  }
+
+  .navbar-dropdown-title:hover, .navbar-dropdown-link:hover {
+    color: {{section.settings.navbar_button_hover}};
+  }
+
+  .sidebar-button {
+    color: {{section.settings.drawer_button}};
+  }
+
+  .sidebar-button:hover {
+    color: {{section.settings.drawer_button_hover}};
+  }
+
+  #mobile-menu {
+    background-color: {{section.settings.navigation_background}};
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Navbar",
+  "class": "navbar shadow-lg",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Image",
+      "info": "200 x 60px .png recommended"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 50,
+      "max": 350,
+      "step": 5,
+      "unit": "px",
+      "label": "Image width",
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_max_width",
+      "min": 50,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile image width",
+      "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "navigation_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "sidebar_menu",
+      "label": "Sidebar Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_register",
+      "label": "Show register link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dropdown_arrows",
+      "label": "Show dropdown arrows",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Desktop nav colors"
+    },
+    {
+      "type": "color",
+      "id": "navbar_bg",
+      "label": "Navbar background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cart_count_color",
+      "label": "Cart item highlight"
+    },
+    {
+      "type": "color",
+      "id": "navbar_button",
+      "label": "Link color",
+      "default": "#030303"
+    },
+    {
+      "type": "color",
+      "id": "navbar_button_hover",
+      "label": "Link hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "navbar_block_button",
+      "label": "Icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "navbar_block_button_hover",
+      "label": "Icon hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "navbar_block_button_bg",
+      "label": "Icon background color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "navbar_block_button_bghover",
+      "label": "Icon background hover color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "navbar_dropdown_color",
+      "label": "Navbar dropdown color",
+      "default": "#F3F4F6"
+    },
+    {
+      "type": "header",
+      "content": "Mobile nav colors"
+    },
+    {
+      "type": "color",
+      "id": "navigation_background",
+      "label": "Mobile nav background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "drawer_button",
+      "label": "Mobile link color",
+      "default": "#030303"
+    },
+    {
+      "type": "color",
+      "id": "drawer_button_hover",
+      "label": "Mobile link text hover color",
+      "default": "#333333"
+    }
+  ]
+}
+{% endschema %}

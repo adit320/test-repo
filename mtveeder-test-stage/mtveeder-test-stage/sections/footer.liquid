@@ -1,0 +1,381 @@
+{%- unless request.page_type == 'captcha' -%}
+  <footer class="py-12 {% if template == 'product' %}pb-52 lg:pb-20{% endif %}" >
+    <div class="container-7xl">
+      <div class="text-center">
+        {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'social_icons' %}
+            {%- if block.settings.show_social_media -%}
+              {% render 'social-media', block: block %}
+            {%- endif -%}
+
+          {% when 'newsletter' %}
+            <div class="py-3">
+              {%- form 'customer', id: 'footer-newsletter', class: 'Footer__Newsletter Form' -%}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="my-6 relative shadow-xl max-w-sm mx-auto ">
+                <input type="text" type="email" name="contact[email]"  id="email" class="block w-full pr-10 text-lg border-none newsletter-{{block.id}}" aria-label="{{ 'footer.newsletter.input' | t }}" placeholder="Email..." required
+                  style='background-color: {{block.settings.field_color}};
+                    color: {{block.settings.text_color}};
+                    border: 1px solid {{block.settings.border_color}};
+                    height: {{block.settings.field_height}}px;
+                  '
+                >
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" >
+                <!-- Heroicon name: solid/mail -->
+                  <svg class="h-7 w-7 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: {{block.settings.icon_color}};">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+              <style>
+                .newsletter-{{block.id}}::placeholder {
+                  color: {{block.settings.text_color}};
+                }
+              </style>
+              {%- if form.posted_successfully? -%}
+                <p class="text-s mt-1 mb-5 text-green-700">{{ 'footer.newsletter.success' | t }}</p>
+              {%- else -%}
+                {%- if form.errors -%}
+                  <p class="text-s mt-1 mb-5 text-red-700">{{ form.errors.messages['email'] }}</p>
+                {%- endif -%}
+                <button type="submit" class="button-default" style="
+                  background-color: {{block.settings.btn_bg_color}};
+                  color: {{block.settings.btn_text_color}};
+                  border-radius: {{block.settings.btn_border_radius}}px;
+                  margin: {{block.settings.button_margin}}px;
+                  font-size: {{block.settings.font_size}}px;
+                  line-height: {{block.settings.font_size | plus: 4}}px;
+                  border: 1px solid {{block.settings.btn_border_color}};
+                ">
+                  Submit
+                </button>
+              {%- endif -%}
+              {%- endform -%}
+            </div>
+          {% when 'navigation' %}
+          <div class="py-3">
+            {%- assign linklist = linklists[block.settings.menu] -%}
+            {%- if linklist != empty -%}
+              <ul class="space-y-5 md:flex md:space-x-2 md:justify-center md:space-y-0 my-12 list-none pl-0">
+                {%- for link in linklist.links -%}
+                  <li>
+                    <a href="{{ link.url }}" style="color: {{block.settings.nav_color}}" class=" px-6 py-2 rounded-md text-sm font-medium">{{ link.title | escape }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            {% if block.settings.show_rule %}
+              <hr style="border-color: {{block.settings.rule_color}}" class="mb-12 max-w-4xl mx-auto" />
+            {% endif %}
+          </div>
+          {% when 'copyright' %}
+            <div class="py-3">
+              {% if block.settings.text != blank %}
+              <p class="text-xs footer-text">
+                {{ block.settings.text }} ©{{ "now" | date: "%Y" }}&nbsp;{{shop.name}}
+                {% if block.settings.powered_by_bloom %}
+                  &nbsp;|&nbsp;
+                  <span>Powered by</span>
+                  <img src="{{ block.settings.bloom_logo | img_url: '160x' }}" width="80" alt="Bloom" class="inline-block" />
+                 {% endif %}
+              </p>
+              {% endif %}
+            </div>
+          {% when 'privacy' %}
+            <div class="py-3">
+              <ul class="text-xs footer-text privacy-text list-none pl-0" style="color: {{block.settings.privacy_color}};">
+                {{block.settings.html_content | html}}
+              </ul>
+            </div>
+          {% when 'richtext' %}
+            <div class="py-3">
+              {%- if block.settings.header != blank -%}
+                  <h2 class="mb-0 text-xl font-medium footer-heading">{{block.settings.header}}</h2>
+              {% endif -%}
+
+              {%- if block.settings.content != blank -%}
+                <div class="Rte mb-1 text-xs footer-text">
+                  {{ block.settings.content }}
+                </div>
+              {%- endif -%}
+            </div>
+        {% endcase %}
+      {% endfor %}
+      </div>
+    </div>
+  </footer>
+{%- endunless -%}
+
+<style>
+  footer {
+    background-color: {{section.settings.footer_background}};
+  }
+  .footer-heading {
+    color: {{section.settings.footer_heading_color}};
+  }
+  .footer-text {
+    color: {{section.settings.footer_text_color}};
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+      {
+        "type": "header",
+        "content": "Footer colors"
+      },
+      {
+        "type": "color",
+        "id": "footer_background",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "footer_heading_color",
+        "label": "Heading",
+        "default": "#1c1b1b"
+      },
+      {
+        "type": "color",
+        "id": "footer_text_color",
+        "label": "Text",
+        "default": "#6a6a6a"
+      }
+  ],
+  "blocks": [
+    {
+      "type": "social_icons",
+      "name": "Social icons",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_social_media",
+          "label": "Show social media",
+          "info": "Make sure to have properly configured your social media in the theme settings.",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "footer_social_button",
+          "label": "Social button logos",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "footer_social_button_hover",
+          "label": "Social button hover",
+          "default": "#F3F4F6"
+        },
+        {
+          "type": "color",
+          "id": "footer_social_button_bg",
+          "label": "Social button background",
+          "default": "#374151"
+        },
+        {
+          "type": "color",
+          "id": "footer_social_button_bghover",
+          "label": "Social button background hover",
+          "default": "#6B7280"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter form",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Form styles"
+        },
+        {
+          "type": "color",
+          "id": "field_color",
+          "label": "Field color",
+          "default": "#FFFFFF"
+        },
+        {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "icon_color",
+            "label": "Icon color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "border_color",
+            "label": "Border color",
+            "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "range",
+          "id": "field_height",
+          "label": "Field height",
+          "min": 24,
+          "max": 70,
+          "step": 1,
+          "default": 42,
+          "unit": "px"
+        },
+        {
+          "type": "header",
+          "content": "Button styles"
+        },
+        {
+            "type": "color",
+            "id": "btn_text_color",
+            "label": "Text color",
+            "default": "#6F665D"
+        },
+        {
+            "type": "color",
+            "id": "btn_border_color",
+            "label": "Border color",
+            "default": "rgba(0,0,0,0)"
+        },
+        {
+            "type": "color",
+            "id": "btn_bg_color",
+            "label": "Background color",
+            "default": "#6c0808"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "label": "Font size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "default": 16,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "button_margin",
+          "label": "Button margin",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "default": 0,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "btn_border_radius",
+          "label": "Border radius",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "default": 0,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "type": "navigation",
+      "name": "Navigation",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Footer menu"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rule",
+          "label": "Show separator rule",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "rule_color",
+          "label": "Rule color",
+          "default": "#eeeeee"
+        },
+        {
+          "type": "color",
+          "id": "nav_color",
+          "label": "Navigation color",
+          "default": "#6a6a6a"
+        }
+      ]
+    },
+    {
+      "type": "privacy",
+      "name": "Privacy",
+      "settings": [
+        {
+          "id": "html_content",
+          "type": "html",
+          "label": "Content",
+          "info": "Enter as HTML",
+          "default": "<li class='hover:underline'><a href=''/policies/privacy-policy'>Privacy Policy</a></li><li class='hover:underline'><a href='/policies/terms-of-service'>Terms of Service</a></li><li class='hover:underline'><a href='/policies/do-not-sell'>Do Not Sell My Personal Information</a></li>"
+        },
+        {
+          "type": "color",
+          "id": "privacy_color",
+          "label": "Privacy links color",
+          "default": "#6a6a6a"
+        }
+      ]
+    },
+    {
+      "type": "copyright",
+      "name": "Copyright and Bloom",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Copyright notice",
+          "id": "text",
+          "default": "Please enjoy our wines responsibly."
+        },
+        {
+          "type": "header",
+          "content": "Powered by Bloom",
+          "info": "Display the Powered by Bloom stamp in the footer."
+        },
+        {
+          "type": "checkbox",
+          "id": "powered_by_bloom",
+          "label": "Show Powered by Bloom",
+          "default": true
+        },
+        {
+           "type": "image_picker",
+           "id": "bloom_logo",
+           "label": "Bloom Logo"
+        }
+      ]
+    },
+    {
+      "type": "richtext",
+      "name": "Richtext",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Header",
+          "id": "header",
+          "default": "Richtext header"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+
+  ]
+
+}
+{% endschema %}
+

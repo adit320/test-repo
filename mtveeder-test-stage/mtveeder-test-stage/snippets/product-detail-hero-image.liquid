@@ -1,0 +1,84 @@
+
+{%- if settings.pdp_hero_layout == 'full_width' and settings.pdp_hero_size == 'adapt' -%}
+  {%- if product.images[1].aspect_ratio == blank -%}
+    {%- assign min_aspect_ratio = 2.0 -%}
+  {%- else -%}
+    {%- assign min_aspect_ratio = product.images[1].aspect_ratio -%}
+  {%- endif -%}
+  {%- assign wrapper_height = 100 | divided_by: min_aspect_ratio -%}
+  {%- style -%}
+    .hero-pdp {
+      height: {{- wrapper_height -}}vw !important;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+<div data-section-id="pdp" data-section-type="hero-section">
+  {%- if settings.pdp_hero_layout == 'fixed_width' -%}
+    <div class="mx-auto container-large-max-screen md:px-6 lg:px-8">
+  {%- endif -%}
+  {%- if settings.pdp_hero_layout == 'fixed_width' and settings.pdp_hero_size ==  'adapt' -%}
+    {%- assign slide_width = 1090 -%}
+    {%- assign min_aspect_ratio = product.images[1].aspect_ratio | default: 2.0 -%}
+    <div class="hero-fixed-width hero--adapt"
+         id="Hero-pdp"
+         data-layout="{{ settings.pdp_hero_layout }}"
+         data-image-loading-animation>
+      {%- assign img_url = product.images[1] | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+      {%- if product.images[1].width < max_width -%}
+        {%- assign slide_width = product.images[1].width -%}
+      {%- endif -%}
+      {%- if product.images[1] != blank -%}
+        <img class="hero-fixed-width__image lazyload lazypreload"
+             data-src="{{ img_url }}"
+             data-widths="[180, 360, 470, 600, 770, 970, 1060, 1280, 1512, 1728, 2048]"
+             data-aspectratio="{{ product.images[1].aspect_ratio }}"
+             data-sizes="auto"
+             style="{%- if slide_width <= max_width -%}
+                      {%- assign min_width = slide_width | times: 100 | divided_by: max_width -%}
+                      min-width: {{ min_width }}%;
+                    {%- endif -%}
+                    object-position: {{ settings.pdp_hero_alignment }};"
+             alt="{{ product.images[1].alt | escape }}">
+      {%- else -%}
+        <span>
+          {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+          {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        </span>
+      {%- endif -%}
+      <noscript>
+        <div class="hero-fixed-width__image"{% if product.images[1] %}{% unless product.images[1].alt == blank %} role="img" aria-label="{{ product.images[1].alt | escape }}"{% endunless %} style="background-image: url('{{ product.images[1] | img_url: '2048x' }}'); background-position: center {{ settings.pdp_hero_alignment }};"{% endif %}></div>
+      </noscript>
+    </div>
+  {%- else -%}
+    <div class="hero hero--{{ settings.pdp_hero_size }} hero-pdp{% if section.settings.title != blank or section.settings.text != blank or section.settings.button_label != blank %} {% endif %} box ratio-container lazyload js"
+         id="Hero-pdp"
+         data-layout="{{ settings.pdp_hero_layout }}"
+         {%- if product.images[1] -%}
+          {% unless product.images[1].alt == blank %}
+          role="img"
+          aria-label="{{ product.images[1].alt | escape }}"
+          data-alt="{{ product.images[1].alt | escape }}"
+          {% endunless %}
+         data-bg="{{ product.images[1] | img_url: '300x300' }}"
+         data-bgset="{% render 'bgset', image: product.images[1] %}"
+         data-sizes="auto"
+         data-parent-fit="cover"
+         style="background-position: {{ settings.pdp_hero_alignment }};"
+         data-image-loading-animation
+         {%- endif -%}>
+    {%- if product.images[1] == blank -%}
+      <div class="placeholder-background">
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+
+    {%- endif -%}
+    </div>
+    <noscript>
+      <div class="hero hero--{{ settings.pdp_hero_size }}{% if section.settings.title != blank or section.settings.text != blank or section.settings.button_label != blank %} {% endif %}"{% if product.images[1] %}{% unless product.images[1].alt == blank %} role="img" aria-label="{{ product.images[1].alt | escape }}"{% endunless %} style="background-image: url('{{ product.images[1] | img_url: '2048x' }}'); background-position: center {{ settings.pdp_hero_alignment }};"{% endif %}></div>
+    </noscript>
+  {%- endif -%}
+  {%- if settings.pdp_hero_layout == 'fixed_width' -%}
+    </div>
+  {%- endif -%}
+</div>
+

@@ -1,0 +1,36 @@
+.TestimonialNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.TestimonialNav__Item {
+  margin: 0 25px;
+  cursor: pointer;
+  opacity: 0.25;
+  transition: opacity 0.2s ease-in-out;
+  will-change: opacity;
+}
+
+.TestimonialNav__Item.is-selected {
+  opacity: 1;
+}
+
+.specs-carousel .flickity-page-dots {
+  bottom: -34px;
+}
+
+.specs-carousel .flickity-prev-next-button {
+  display: none;
+}
+
+.flickity-page-dots .dot {
+  margin: 0px 12px;
+}
+
+@media screen and (max-width: 600px){
+  .TestimonialNav__Item {
+    margin: 0 14px;
+  }
+}

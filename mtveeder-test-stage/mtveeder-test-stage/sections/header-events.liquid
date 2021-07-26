@@ -1,0 +1,49 @@
+<section class="section"  style="background-color: {{section.settings.background_color }};" >
+  <div class="container-7xl">
+    <div class="text-center mx-auto max-w-md {% if section.settings.full_width %} max-w-4xl {% endif %}">
+      {% if section.settings.section_title != blank %}
+        <div class="mb-5">
+          <h2 class="text-2xl font-semibold">{{ section.settings.section_title | escape }}</h2>
+        </div>
+      {% endif %}
+      {% if section.settings.text != blank %}
+        <div class="rte">{{ section.settings.text }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Event section header",
+  "class": "richtext",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Wide display"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Heading",
+      "default": "Event section title"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Describe your event.</p>"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#fff"
+    }
+  ]
+}
+{% endschema %}
+

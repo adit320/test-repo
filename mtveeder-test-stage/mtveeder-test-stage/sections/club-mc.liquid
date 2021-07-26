@@ -1,0 +1,681 @@
+{% comment %}
+  This is a generated file. Please edit and copy the original file (sections/club.liquid) to maintain consistency 
+  between different page versions of this section
+{% endcomment %}
+<style>
+  {{ section.settings.atc_button_font | font_face: font_display: 'fallback' }}
+</style>
+<!--=================================================================================================================
+Stylesheet
+===================================================================================================================-->
+<style>
+  .membership-cards .rte ul {
+    margin-top: 1rem;
+  }
+  .membership-cards .rte li {
+    width: 100%;
+    list-style: none;
+    padding: 1.25rem;
+  }
+  .membership-cards .rte li {
+    border-bottom: 1px solid #2E2E2E;
+    text-align: center;
+  }
+  .membership-cards .rte li:first-of-type {
+    border-top: 1px solid #2E2E2E;
+  }
+  .membership-cards .rte li:last-of-type {
+    border-bottom: none;
+  }
+</style>
+
+<!--=================================================================================================================
+Join club script: function for dynamic buttons
+===================================================================================================================-->
+ <script>
+   var joinClub = async function joinClub(variantId, button, checkoutOption) {
+     var container = Bloom.storefront.utilities._.closestAncestor(button, '[data-club-signup]');
+     var optionName = container.querySelector('[name="signup[option_name]"]').value;
+     if (!variantId) {
+       addAndOpenCart(optionName, 1);
+     }
+     else {
+       addAndOpenCart(optionName, 1, { 'Selections': optionName });
+     }
+   }
+</script>
+
+
+<!--=================================================================================================================
+Club header
+===================================================================================================================-->
+<section style="background-color: {{section.settings.bg_color}}">
+  <div class="container-7xl pt-16 pb-7 mx-auto">
+    <div class="membership-grid">
+      <div class="mb-12 text-center mx-auto max-w-md {% if section.settings.full_width %} max-w-4xl {% endif %}">
+        <h1 class="text-2xl mb-5 font-semibold bloom-heading-text">{{ section.settings.heading_text }}</h1>
+        <p class="bloom-intro_text">{{ section.settings.intro_text }}</p>
+      </div>
+
+      <!--=================================================================================================================
+      Level description
+      ===================================================================================================================-->
+      <div class="flex flex-wrap justify-center -ml-4 -mb4 membership-cards">
+        {% assign applied_card_color = settings.card_bg %}
+        {% if section.settings.card_color_bg != "rgba(0,0,0,0)" %}
+        {% assign applied_card_color = section.settings.card_color_bg %}
+        {% endif %}
+
+        {% for block in section.blocks %}
+        {% if block.settings.to_join %}
+          {% assign checkout-option =  block.settings.to_join_url %}
+        {% elsif block.settings.to_cart %}
+          {% assign checkout-option = "cart" %}
+        {% elsif block.settings.to_checkout %}
+          {% assign checkout-option = "checkout" %}
+        {% else %}
+          {%assign checkout-option = "checkout" %}
+        {% endif %}
+
+        {%- assign image_padding = 'p-8 pb-0' -%}
+        {% case section.settings.image_size %}
+          {% when "full" %}
+            {%- assign image_padding = '' -%}
+          {% when 'padded' %}
+            {%- assign image_padding = 'p-8 pb-0' -%}
+        {% endcase %}
+
+        {% assign card_width = 'w-full md:w-1/2 lg:w-1/3' %}
+        {% case block.settings.card_width %}
+          {% when 'w-full' %}
+            {% assign card_width = 'w-full' %}
+          {% when 'w-1/2' %}
+            {% assign card_width = 'w-full md:w-1/2' %}
+          {% when 'w-1/3' %}
+            {% assign card_width = 'w-full md:w-1/2 lg:w-1/3' %}
+          {% when 'w-1/4' %}
+            {% assign card_width = 'w-full md:w-1/2 lg:w-1/4' %}
+          {% else %}
+            {% assign card_width = 'w-full md:w-1/2 lg:w-1/3' %}
+        {% endcase %}
+
+        {% render 'membership-selection',
+          section: section,
+          block: block,
+          max_image_width: section.settings.image_width,
+          max_image_height: block.settings.image_height,
+          alignment: 'center',
+          column_width: card_width,
+          image_padding: image_padding,
+          card_bg: applied_card_color,
+          id: block.id,
+          enable_image: true,
+          product_options: block.settings.product_options,
+          render_dropdown_options: render_dropdown_options,
+          checkout_option: checkout-option
+        %}
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Membership tiers",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Introduction"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Wide display"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Page title"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Intro text"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Image padding",
+      "default": "padded",
+      "options": [
+        {
+          "value": "padded",
+          "label": "Padded"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 20,
+      "max": 1400,
+      "step": 20,
+      "default": 600,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color"
+    },
+    {
+      "type": "color",
+      "id": "card_color_bg",
+      "label": "Card background color"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "range",
+      "id": "atc_button_minimum_width",
+      "label": "Button width",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "color",
+      "id": "atc_button_border",
+      "label": "Button border color"
+    },
+    {
+      "type": "color",
+      "id": "atc_button_color",
+      "label": "Button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "atc_button_text_color",
+      "label": "Button text color"
+    },
+    {
+      "type": "range",
+      "id": "atc_button_margin",
+      "label": "Margin",
+      "min": 0,
+      "max": 3,
+      "step": 0.1,
+      "unit": "em",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "atc_button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "font_picker",
+      "id": "atc_button_font",
+      "label": "Button font",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "range",
+      "id": "atc_button_font_size",
+      "label": "Button font size",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "multi_option",
+      "name": "Multiple option card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "card_width",
+          "label": "Width",
+          "default": "w-1/3",
+          "options": [
+            {
+              "value": "w-full",
+              "label": "100%"
+            },
+            {
+              "value": "w-1/2",
+              "label": "50%"
+            },
+            {
+              "value": "w-1/3",
+              "label": "33%"
+            },
+            {
+              "value": "w-1/4",
+              "label": "25%"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1000px wide recommended"
+        },
+        {
+          "id": "club_level_name",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "level_description",
+          "type": "richtext",
+          "label": "Description"
+        },
+        {
+          "id": "level_benefits",
+          "type": "html",
+          "label": "Benefits",
+          "info": "Enter as HTML"
+        },
+        {
+          "id": "club_price",
+          "type": "text",
+          "label": "Price"
+        },
+        {
+          "type": "header",
+          "content": "Join flow options"
+        },
+        {
+          "id": "to_join",
+          "type": "checkbox",
+          "label": "Send customer to a join page",
+          "default": false
+        },
+        {
+          "id": "to_join_url",
+          "type": "text",
+          "label": "URL to join page",
+          "info": "Example: /pages/join-club/"
+        },
+        {
+          "id": "to_checkout",
+          "type": "checkbox",
+          "label": "Send customer directly to checkout",
+          "info": "Requires a product to be created and use the Variant ID below",
+          "default": false
+        },
+        {
+          "id": "to_cart",
+          "type": "checkbox",
+          "label": "Add membership to the shopping cart",
+          "info": "Requires a product to be created and use the Variant ID below",
+          "default": false
+        },
+        {
+          "id": "level_variant_id",
+          "type": "text",
+          "label": "Level or variant ID",
+          "info": "Only use this field if this card represents a single club level and options below aren't levels, but release options."
+        },
+        {
+          "type": "header",
+          "content": "product options"
+        },
+        {
+          "type": "checkbox",
+          "id": "product_options",
+          "label": "Display product options",
+          "info": "Note: This will display a dropdown with product preferences",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Preference dropdown text"
+        },
+        {
+          "id": "preference_dropdown_text",
+          "type": "text",
+          "label": "Preference dropdown text",
+          "default": "Select your wine preference:"
+        },
+        {
+          "type": "header",
+          "content": "Option 1"
+        },
+        {
+          "id": "option_one_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_one",
+          "type": "text",
+          "label": "Option name",
+          "info": " Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Option 2"
+        },
+        {
+          "id": "option_two_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_two",
+          "type": "text",
+          "label": "Option name",
+          "info": " Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Option 3"
+        },
+        {
+          "id": "option_three_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_three",
+          "type": "text",
+          "label": "Option name",
+          "info": " Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Option 4"
+        },
+        {
+          "id": "option_four_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_four",
+          "type": "text",
+          "label": "Option name",
+          "info": " Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Option 5"
+        },
+        {
+          "id": "option_five_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_five",
+          "type": "text",
+          "label": "Option name",
+          "info": " Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Option 6"
+        },
+        {
+          "id": "option_six_variant_label",
+          "type": "text",
+          "label": "Option preference",
+          "info": "Member option preference option in dropdown."
+        },
+        {
+          "id": "option_six",
+          "type": "text",
+          "label": "Option name",
+          "info": "Must be named the same as in the Bloom release."
+        },
+        {
+          "type": "header",
+          "content": "Join button label"
+        },
+        {
+          "id": "join_button_label",
+          "type": "text",
+          "label": "Join button label",
+          "default": "Join the club"
+        }
+      ]
+    },
+    {
+      "type": "single_option",
+      "name": "Single level card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "card_width",
+          "label": "Width",
+          "default": "w-1/3",
+          "options": [
+            {
+              "value": "w-full",
+              "label": "100%"
+            },
+            {
+              "value": "w-1/2",
+              "label": "50%"
+            },
+            {
+              "value": "w-1/3",
+              "label": "33%"
+            },
+            {
+              "value": "w-1/4",
+              "label": "25%"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1000px wide recommended"
+        },
+        {
+          "type": "header",
+          "content": "Club information"
+        },
+        {
+          "id": "club_level_name",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "level_description",
+          "type": "richtext",
+          "label": "Description"
+        },
+        {
+          "id": "level_benefits",
+          "type": "html",
+          "label": "Benefits",
+          "info": "Enter as HTML"
+        },
+        {
+          "id": "club_price",
+          "type": "text",
+          "label": "Price"
+        },
+        {
+          "type": "header",
+          "content": "Join flow options"
+        },
+        {
+          "id": "to_join",
+          "type": "checkbox",
+          "label": "Send customer to a join page",
+          "default": false
+        },
+        {
+          "id": "to_join_url",
+          "type": "text",
+          "label": "URL to join page",
+          "info": "Example: /pages/join-club/"
+        },
+        {
+          "id": "to_checkout",
+          "type": "checkbox",
+          "label": "Send customer directly to checkout",
+          "default": false
+        },
+        {
+          "id": "to_cart",
+          "type": "checkbox",
+          "label": "Add membership to the shopping cart",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Product variant and default wines"
+        },
+        {
+          "id": "level_variant_id",
+          "type": "text",
+          "label": "Level or Variant id"
+        },
+        {
+          "id": "join_button_label",
+          "type": "text",
+          "label": "Join Button label",
+          "default": "Join the club"
+        }
+      ]
+    }, 
+    {
+      "type": "purchase_option",
+      "name": "Single level w/ purchase",
+      "settings": [
+        {
+          "type": "select",
+          "id": "card_width",
+          "label": "Width",
+          "default": "w-1/3",
+          "options": [
+            {
+              "value": "w-full",
+              "label": "100%"
+            },
+            {
+              "value": "w-1/2",
+              "label": "50%"
+            },
+            {
+              "value": "w-1/3",
+              "label": "33%"
+            },
+            {
+              "value": "w-1/4",
+              "label": "25%"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1000px wide recommended"
+        },
+        {
+          "type": "header",
+          "content": "Club information"
+        },
+        {
+          "id": "club_level_name",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "level_description",
+          "type": "richtext",
+          "label": "Description"
+        },
+        {
+          "id": "level_benefits",
+          "type": "html",
+          "label": "Benefits",
+          "info": "Enter as HTML"
+        },
+        {
+          "id": "club_price",
+          "type": "text",
+          "label": "Price"
+        },
+        {
+          "type": "header",
+          "content": "Join flow options"
+        },
+        {
+          "id": "to_join",
+          "type": "checkbox",
+          "label": "Send customer to a join page",
+          "default": false
+        },
+        {
+          "id": "to_join_url",
+          "type": "text",
+          "label": "URL to join page",
+          "info": "Example: /pages/join-club/"
+        },
+        {
+          "id": "to_checkout",
+          "type": "checkbox",
+          "label": "Send customer directly to checkout",
+          "default": false
+        },
+        {
+          "id": "to_cart",
+          "type": "checkbox",
+          "label": "Add membership to the shopping cart",
+          "default": false
+        },
+        {
+          "id": "join_button_label",
+          "type": "text",
+          "label": "Join Button label",
+          "default": "Join the club"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

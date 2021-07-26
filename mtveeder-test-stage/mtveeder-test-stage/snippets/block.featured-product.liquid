@@ -1,0 +1,60 @@
+<div class="section" {% if block.settings.bg_color %} style="background-color: {{block.settings.bg_color}}" {% endif %}>
+  <div>
+    <div class="container-large-max-screen py-4 md:py-6 flex flex-wrap {% if block.settings.alignment == "right" %} flex-col-reverse lg:flex-row{% endif %}">
+      {% assign product = all_products[block.settings.product] %}
+
+      {% capture image %}
+      <div class="flex justify-center w-full lg:w-2/5 px-4 md:px-0{% if block.settings.alignment == "right" %}lg:pr-6{% else %}lg:pl-6{% endif %}">
+        {%- assign img_url = product.media[1] | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        <img class="h-full min-h-400p object-cover feature-row__image lazyload"
+             id="{{ section.id }}"
+             data-src="{{ img_url }}"
+             data-widths="[2048, 2400]"
+             data-sizes="auto"
+             alt="{{product.title}}"
+        />
+      </div>
+      {% endcapture %}
+      {% capture content %}
+      <div class="w-full lg:w-3/5 flex-wrap xl:flex-nowrap">
+        <div class="flex flex-between flex-wrap md:max-w-1/2 lg:max-w-full lg:flex-nowrap md:mx-auto items-start pb-10 sm:pb-5 font-bold px-4 md:px-6">
+          <h2 class="text-xl w-full mb-4 lg:mb-0 lg:w-3/5 text-center lg:text-left">
+            {{product.title}}
+          </h2>
+          <h2 class="text-xl w-full lg:w-2/5 text-center lg:text-right">
+            {{product.price | money_without_trailing_zeros}}
+          </h2>
+        </div>
+        <div class="lg:px-7">
+          {% render 'product-specs', product: product %}
+        </div>
+        <div class="grid gap-2 grid-cols-1 md:max-w-1/2 md:mx-auto md:px-0 lg:max-w-full lg:grid-cols-2 px-4 lg:px-7">
+          <button class="button-default w-full" onclick="addAndOpenCart({{product.first_available_variant.id}}, 1)"
+            style='
+              background-color: {{settings.atc_button_color}};
+              color: {{settings.atc_button_text_color}};
+              border-radius: {{settings.atc_button_border_radius}}px;
+              border-color: {{settings.atc_button_border}};
+              font-family: {{settings.atc_button_font.family}};
+              font-weight: {{settings.atc_button_font.weight}};
+              font-size: {{settings.atc_button_font_size}}px;
+              line-height: {{settings.atc_button_font_size | plus: 4}}px;
+            '
+          >
+            {{settings.atc_button_label}}
+          </button>
+          <a href="{{product.url}}" class="button-secondary w-full">{{settings.product_button_label}}</a>
+        </div>
+      </div>
+      {% endcapture %}
+
+      {% if block.settings.alignment == "left" %}
+        {{image}}
+        {{content}}
+      {% else %}
+        {{content}}
+        {{image}}
+      {% endif %}
+    </div>
+  </div>
+</div>

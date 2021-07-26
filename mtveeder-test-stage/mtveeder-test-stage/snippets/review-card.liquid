@@ -1,0 +1,21 @@
+<div class="{{ column_width }} pl-6 mb-6 text-{{ alignment }}">
+  <div class="shadow-xl h-full bg-white flex justify-center items-center flex-column"  style="background-color: {{card_bg}}; {% if use_min_height %}min-height: {{min_height}}px;{% endif %}">
+    <div class="pt-6 px-8 pb-8 max-w-full">
+      {% render 'star-rating', rating: rating, star_color: star_color %}
+      {% if title != blank %}
+        <h3 class="text-xl font-semibold mb-2 ">{{ title | escape }}</h3>
+      {% endif %}
+      {% if text != blank %}
+        <div class="rte">{{ text }}</div>
+      {% endif %}
+
+      {% if button_label != blank and button_link != blank %}
+        <a href="{{ button_link }}"
+          class="button-default mt-7"
+          >
+          {{- button_label | escape -}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
